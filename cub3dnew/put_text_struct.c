@@ -46,6 +46,7 @@ int check_map_section(t_parsing *parsing, int num_lines)
         if (sign_count == 7)
         {
         int nb_ligne_vide = count_empty_lines_after(parsing->map, i, num_lines);
+        
         parsing->start_map = nb_ligne_vide + i + 1;
              //printf("depart de la map = %s\n", parsing->map[parsing->start_map]);
            // printf("\n- map config l15 --------> = %s\n", parsing->map[15]);
@@ -89,6 +90,7 @@ void resize_and_copy(char ***array, int current_size, int new_size)
     char **new_array = (char **)malloc(new_size * sizeof(char *));
     if (!new_array)
         free(new_array);
+
     memcpy(new_array, *array, current_size * sizeof(char *));
     free(*array);
     *array = new_array;

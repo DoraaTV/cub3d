@@ -132,7 +132,7 @@ void    get_player_pos(t_data *s)
             if (compare(s->parsing.map[i][j]) == 1)
             {
                 printf("coucou %d %d\n", i, j);
-                s->player_x = i * 64;
+                s->player_x = (i - s->parsing.start_map) * 64;
                 s->player_y = j * 64;
                 printf("%d %d\n", s->player_x, s->player_y);
                 return ;
