@@ -314,11 +314,6 @@ int extension_compare(const char *text_file, const char *extension)
 
 int check_texture_value(char **text_file, char *name_texture) 
 {
-    static int already_present = 0;
-
-    // Réinitialise à 0 pour chaque appel de la fonction
-    already_present = 0;
-
     // Vérifie si le nom du fichier se termine par l'extension ".xpm"
     if (extension_compare(*text_file, ".xpm") == 1) 
     {

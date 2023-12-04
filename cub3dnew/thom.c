@@ -112,10 +112,20 @@ int    drawPlayer(t_data *s)
     return (0);
 }
 
-int compare(int a)
+int compare(int a, t_data *s)
 {
     if (a == 'N' || a == 'W' || a == 'S' || a == 'E')
+    {
+        if (a == 'N')
+            s->player_direction = 270;
+        else if (a == 'W')
+            s->player_direction = 180;
+        else if (a == 'S')
+            s->player_direction = 90;
+        else if (a == 'E')
+            s->player_direction = 0;
         return (1);
+    }
     return (0);
 }
 
@@ -129,7 +139,7 @@ void    get_player_pos(t_data *s)
         j = 0;
         while (s->parsing.map[i][j])
         {
-            if (compare(s->parsing.map[i][j]) == 1)
+            if (compare(s->parsing.map[i][j], s) == 1)
             {
                 printf("coucou %d %d\n", i, j);
                 s->player_x = (i - s->parsing.start_map) * 64;
@@ -152,7 +162,6 @@ int init_window(t_data s)
     printf("%d %d\n", s.player_x, s.player_y);
     mlx_get_screen_size(s.mlx, &s.parsing.r_value_x, &s.parsing.r_value_y);
     s.win= mlx_new_window(s.mlx, s.parsing.r_value_x, s.parsing.r_value_y, "cub3d");
-    s.player_direction = 0;
     s.player_dx = cos(degToRad(s.player_direction));
     s.player_dy = sin(degToRad(s.player_direction));
     mlx_hook(s.win, 2, 1L << 0, key_event, &s);
