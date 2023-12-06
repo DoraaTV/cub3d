@@ -13,8 +13,8 @@
 # include <ctype.h>
 # include <math.h>
 
-# define WINDOW_WIDTH 800
-# define WINDOW_HEIGHT 600
+# define WINDOW_HIGHT 1080.0
+# define WINDOW_WIDTH 1340.0
 
 # define MAX_LINE_LENGTH 204//1024 // longueur maximale d'une ligne (a ajuster mais les lignes sont courtes donc ca va)
 # define MAX_MAP_SIZE_X 24 // Ajustez selon besoin
@@ -87,11 +87,26 @@ typedef struct s_data
 	//char **text_file;
 
 	/*position x et y du player*/
+	int i;
 	int player_x;
 	int player_y;
 	float player_direction;
 	float player_dx;
 	float player_dy;
+	double ray_angle;
+
+	char *addr;
+	int bpp[5];
+	int llen[5];
+	int w_w;
+	int w_h;
+	int e_w;
+	int e_h;
+	int s_w;
+	int s_h;
+	int n_w;
+	int n_h;
+
 
 }			t_data;
 
