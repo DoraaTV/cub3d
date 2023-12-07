@@ -13,7 +13,7 @@
 # include <ctype.h>
 # include <math.h>
 
-# define WINDOW_HIGHT 1080.0
+# define WINDOW_HEIGHT 1080.0
 # define WINDOW_WIDTH 1340.0
 
 # define MAX_LINE_LENGTH 204//1024 // longueur maximale d'une ligne (a ajuster mais les lignes sont courtes donc ca va)
@@ -96,8 +96,8 @@ typedef struct s_data
 	double ray_angle;
 
 	char *addr;
-	int bpp[5];
-	int llen[5];
+	int *bpp;
+	int *llen;
 	int w_w;
 	int w_h;
 	int e_w;
@@ -106,6 +106,23 @@ typedef struct s_data
 	int s_h;
 	int n_w;
 	int n_h;
+
+	char *no_texadr;
+	char *so_texadr;
+	char *we_texadr;
+	char *ea_texadr;
+
+	char *no_tex;
+	char *so_tex;
+	char *we_tex;
+	char *ea_tex;
+
+	char *no_textr;
+	char *so_textr;
+	char *we_textr;
+	char *ea_textr;
+	int *keys;
+	int *en;
 
 
 }			t_data;

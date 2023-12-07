@@ -167,12 +167,18 @@ void    get_player_pos(t_data *s)
     }
 }
 
-void ft_pixel_put(t_data *s, int x, int y, int color)
+void ft_pixel_put(t_data *s, int x, int y, int color) // a modif
 {
-    char *dst;
-
-    dst = s->addr + (y * s->llen[0] + x * (s->bpp[0] / 8));
+     char *dst;
+// (void)s;
+// (void)x;
+// (void)y;
+// (void)color;
+// // (void)dst;
+     dst = s->addr + (y * s->llen[0] + x * (s->bpp[0] / 8));
     *(unsigned int*)dst = color;
+    printf("color = %d\n", color);
+
 }
 
 void draw_line_4(t_data *s, float y1, double lineh, float x)
@@ -181,16 +187,43 @@ void draw_line_4(t_data *s, float y1, double lineh, float x)
     int i;
 
     i = 0;
-    if (lineh > WINDOW_HIGHT)
-        i = (lineh - WINDOW_HIGHT) / 2;
+    if (lineh > WINDOW_HEIGHT)
+        i = (lineh - WINDOW_HEIGHT) / 2;
     while (i < lineh)
     {
-        if (y1 >= WINDOW_HIGHT)
+        if (y1 >= WINDOW_HEIGHT)
             break ;
-        if ((s->ray_angle >= 0 && s->ray_angle <= 90) || (s->ray_angle > 270 && s->ray_angle <= 360))
+        // if ((s->ray_angle >= 0 && s->ray_angle <= 90) || (s->ray_angle > 270 && s->ray_angle <= 360))
+        //     dst = s->parsing.we_texture_value + (int)(i * (s->w_h / lineh)) % s->w_h * s->llen[3] + (int)(x * s->w_w / 50) % s->w_w * (s->bpp[3] / 8);
+        // if (s->ray_angle > 90 && s->ray_angle <= 270)
+        //     dst = s->parsing.ea_texture_value + (int)(i * (s->e_h / lineh)) % s->e_h * s->llen[4] + (int)(x * s->e_w / 50) % s->e_w * (s->bpp[4] / 8);
+        // else
+        //     {
+        //         printf("dst n'est pas assigne \n");
+        //         exit (0);
+        //     }
+
+        printf("s->ray_angle = %f\n", s->ray_angle);
+
+        if ((s->ray_angle >= 0 && s->ray_angle <= 90) || (s->ray_angle >= 270 && s->ray_angle <= 360))
+        {
+            printf("Condition 1 is true\n");
             dst = s->parsing.we_texture_value + (int)(i * (s->w_h / lineh)) % s->w_h * s->llen[3] + (int)(x * s->w_w / 50) % s->w_w * (s->bpp[3] / 8);
-        if (s->ray_angle > 90 && s->ray_angle <= 270)
+        }
+        else
+        {
+            printf("Condition 1 is false\n");
+        }
+
+        if (s->ray_angle >= 90 && s->ray_angle <= 270)
+        {
+            printf("Condition 2 is true\n");
             dst = s->parsing.ea_texture_value + (int)(i * (s->e_h / lineh)) % s->e_h * s->llen[4] + (int)(x * s->e_w / 50) % s->e_w * (s->bpp[4] / 8);
+        }
+        else
+        {
+            printf("Condition 2 is false\n");
+        }
         ft_pixel_put(s, s->i, y1, *(unsigned int*)dst);
         y1++;
         i++;
@@ -203,11 +236,11 @@ void draw_line_3(t_data *s, float y1, double lineh, float x)
     int i;
 
     i = 0;
-    if (lineh > WINDOW_HIGHT)
-        i = (lineh - WINDOW_HIGHT) / 2;
+    if (lineh > WINDOW_HEIGHT)
+        i = (lineh - WINDOW_HEIGHT) / 2;
     while (i < lineh)
     {
-        if (y1 >= WINDOW_HIGHT)
+        if (y1 >= WINDOW_HEIGHT)
             break ;
         if (s->ray_angle > 180 && s->ray_angle <= 360)
             dst = s->parsing.no_texture_value + (int)(i * (s->n_h / lineh)) % s->n_h * s->llen[1] + (int)(x * s->n_w / 50) % s->n_w * (s->bpp[1] / 8);
@@ -236,7 +269,7 @@ void draw_floor(t_data *s, double lineh, float lineo)
     int j;
 
     j = (int)(lineh + lineo);
-    while (j < WINDOW_HIGHT)
+    while (j < WINDOW_HEIGHT)
     {
         ft_pixel_put(s, s->i, j, s->parsing.floor_value_1);
         j++;
@@ -254,20 +287,24 @@ void render3d(t_data *s, float x, float y, int i)
     ca = fixang(s->player_direction - s->ray_angle);
     len = dist(s->player_x, s->player_y, x, y);
     len = len * cos(degToRad(ca));
-    lineh = (50 * WINDOW_HIGHT) / len;
+    lineh = (50 * WINDOW_HEIGHT) / len;
     ch = lineh;
-    if (lineh > WINDOW_HIGHT)
-        lineh = WINDOW_HIGHT;
+    if (lineh > WINDOW_HEIGHT)
+        lineh = WINDOW_HEIGHT;
     //lineh est la hauteur de la ligne a tracer
     //lineo est la position de la ligne a tracer
     //ch est la hauteur de la ligne a tracer
-    lineo = (WINDOW_HIGHT / 2) - (lineh / 2);
+    lineo = (WINDOW_HEIGHT / 2) - (lineh / 2);
     (void)ch;
     (void)lineo;
     if (i == 1)
+    {
         draw_line_3(s, lineo, ch, x);
+    }
     else
+    {
         draw_line_4(s, lineo, ch, y);
+    }
     draw_floor(s, lineh, lineo);
     draw_sky(s, lineo);
 }
@@ -306,6 +343,7 @@ void castrays(t_data *s, double x, double y)
 
     x2 = s->player_x;
     y2 = s->player_y;
+
     while (1)
     {
         // ces deux calculs sont pour afficher selon l'angle du joueur (ce qui est present dans son rayon)
@@ -331,30 +369,163 @@ void    draw_rays(t_data *s)
 
     s->ray_angle = fixang(s->player_direction - 30);
     s->i = 0;
-    while (s->i < 60)
+    while (s->i < WINDOW_WIDTH)
     {
         x = (cos(degToRad(s->ray_angle)) * 5);
         y = (sin(degToRad(s->ray_angle)) * 5);
         castrays(s, x, y);
         s->i++;
-        s->ray_angle = 60.0 / WINDOW_WIDTH;
+        s->ray_angle += 60.0 / WINDOW_WIDTH;
         s->ray_angle = fixang(s->ray_angle);
     }
+}
+
+// je dois avoir un fichier pour chaque texture puis j'associe ce fichier
+// a la texture correspondante grace a unefonction de la mlx, si la mlx
+// renvoit une erreur j'en renvoie une aussi
+
+// En résumé, no_tex est une référence à la structure d'image
+// complète (contenant des métadonnées et l'adresse de données),
+// tandis que no_texadr est l'adresse de mémoire où les données
+// de l'image spécifique à la texture commencent.
+
+// Fonction auxiliaire pour afficher les messages d'erreur
+void print_error(const char *texture_type, const char *message) 
+{
+    printf("Error: %s %s\n", message, texture_type);
+}
+
+// Fonction auxiliaire pour charger une texture et son adresse mémoire
+// void load_texture(t_data s, void *tex_path, char *texture_value, int tex_index) 
+// {
+//     // (void)tex_path;
+//     // (void)tex_index;
+//     // (void)s;
+//     // (void)texture_value;
+
+//     s.n_w = 0;
+//     s.n_h = 0;
+//     s.w_w = 0;
+//     s.w_h = 0;
+//     s.s_w = 0;
+//     s.s_h = 0;
+//     s.e_w = 0;
+//     s.e_h = 0;
+
+//     s.img = mlx_xpm_file_to_image(s.mlx, tex_path, &s.n_w, &s.n_h);
+//     if (!s.img)
+//         print_error(tex_path, "Wrong texture path!!");
+//     else
+//         s.img_addr = mlx_get_data_addr(s.img, &s.bpp[tex_index], &s.llen[tex_index], &s.en[tex_index]);
+// }
+
+// // Fonction principale pour charger toutes les textures
+// void get_tex_path(t_data s, t_parsing *parsing) 
+// {
+//     load_texture(s, s.no_textr, parsins.no_texture_value, 1);
+//     //printf("1: %s, 2: %s\n", (char *)s.no_textr, parsins.no_texture_value);
+//     load_texture(s, s.we_textr, parsins.we_texture_value, 2);
+//     load_texture(s, s.so_textr, parsins.so_texture_value, 3);
+//     load_texture(s, s.ea_textr, parsins.ea_texture_value, 4);
+// }
+
+int	get_tex_path(t_data *s)
+{
+    s->no_textr = "./xpm/crate2_4.xpm"; //remplacer par mettre parsing->no_texture_value;
+    s->we_textr = "./xpm/crate3_2.xpm";
+    s->so_textr = "./xpm/crate3_1.xpm";
+    s->ea_textr = "./xpm/crate3_3.xpm";
+
+    printf("s.no_textr = %s\n", s->no_textr);
+    printf("Before: s.n_w = %d, s.n_h = %d\n", s->n_w, s->n_h);
+	s->no_tex = mlx_xpm_file_to_image(s->mlx, s->no_textr, &(s->n_w), &(s->n_h));
+    printf("After: s.n_w = %d, s.n_h = %d\n", s->n_w, s->n_h);
+
+	if (!s->no_tex) //si on a pas reussi a charger l'image avec la fonction mlx_xpm_file_to_image
+    {
+		printf("wrong texture path!!\n(north texture)\n");
+        return 1;
+    }
+	s->we_tex = mlx_xpm_file_to_image(s->mlx, s->we_textr, &(s->w_w), &(s->w_h));
+	
+    if (!s->we_tex)
+		{
+            printf("wrong texture path!!\n(west texture)\n");
+            return 1;
+        }
+	s->so_tex = mlx_xpm_file_to_image(s->mlx, s->so_textr, &(s->s_w), &(s->s_h));
+	if (!s->so_tex)
+		{
+            printf("wrong texture path!!\n(south texture)\n");
+            return 1;
+        }
+	s->ea_tex = mlx_xpm_file_to_image(s->mlx, s->ea_textr, &(s->e_w), &(s->e_h));
+	if (!s->ea_tex)
+		{
+            printf("wrong texture path!!\n(east texture)\n");
+            return 1;
+        }
+
+// La fonction mlx_get_data_addr est utilisée pour obtenir
+//  l'adresse mémoire de l'image chargée par la 
+//  fonction mlx_xpm_file_to_image
+
+	s->no_texadr = mlx_get_data_addr(s->no_tex, &(s->bpp[1]),
+			&(s->llen[1]), &(s->en[1]));
+printf("s.no_texadr = %p\n", s->no_texadr);
+	s->so_texadr = mlx_get_data_addr(s->so_tex, &(s->bpp[2]),
+			&(s->llen[2]), &(s->en[2]));
+printf("s.so_texadr = %p\n", s->no_texadr);
+	s->we_texadr = mlx_get_data_addr(s->we_tex, &(s->bpp[3]),
+			&(s->llen[3]), &(s->en[3]));
+	s->ea_texadr = mlx_get_data_addr(s->ea_tex, &(s->bpp[4]),
+			&(s->llen[4]), &(s->en[4]));
+
+return (0);
+}
+
+int parsing_init_textu(t_data s)
+{
+    //initialision
+    // game->floor_c = -1;
+	// game->ceilling_c = -1;
+	s.no_textr = NULL;
+	s.so_textr = NULL;
+	s.we_textr = NULL;
+	s.ea_textr = NULL;
+    s.keys = calloc(sizeof(int), 6); //ATTENTION UTILISATION DE CALLOC SANS LIBFT
+	s.llen = calloc(sizeof(int), 5);  //ATTENTION UTILISATION DE CALLOC SANS LIBFT
+	s.bpp = calloc(sizeof(int), 5);  //ATTENTION UTILISATION DE CALLOC SANS LIBFT
+	s.en = calloc(sizeof(int), 5);  //ATTENTION UTILISATION DE CALLOC SANS LIBFT
+	s.img = mlx_new_image(s.mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+	s.addr = mlx_get_data_addr(s.img, &s.bpp[0],
+			&s.llen[0], &s.en[0]);
+	if (get_tex_path(&s) == 1)
+        return (1);
+    get_player_pos(&s);// get_player_cord(s);
+    s.player_dx = cos(degToRad(s.player_direction)) * 8; //* P_SPEED; pas capte
+    s.player_dy = sin(degToRad(s.player_direction)) * 8;
+    draw_rays(&s);//drawPlayer(&s); ou drawrays
+
+    // printf("mlx_ptr: %d, win_ptr: %d, img_ptr: %d\n", &s.mlx, s.mlx_win, s.img);
+    //  mlx_put_image_to_window(s.mlx, s.mlx_win, s.img, 0, 0);
+return 0;
 }
 
 int init_window(t_data s)
 {
     s.mlx = mlx_init();
     // printf("r x = %d\n r y =%d\n", s.parsing.r_value_x, s.parsing.r_value_y);
-    get_player_pos(&s);
+    //get_player_pos(&s);
     mlx_get_screen_size(s.mlx, &s.parsing.r_value_x, &s.parsing.r_value_y);
     s.win= mlx_new_window(s.mlx, s.parsing.r_value_x, s.parsing.r_value_y, "cub3d");
-    s.player_dx = cos(degToRad(s.player_direction));
-    s.player_dy = sin(degToRad(s.player_direction));
+    if (parsing_init_textu(s) == 1)
+            return (1);
+    // s.player_dx = cos(degToRad(s.player_direction));
+    // s.player_dy = sin(degToRad(s.player_direction));
     mlx_hook(s.win, 2, 1L << 0, key_event, &s);
     mlx_hook(s.win, 17, 0, closer, &s);
     // drawPlayer(&s);
-    draw_rays(&s);
     // mlx_loop_hook(s.mlx, drawMap2d, &s);
     mlx_loop(s.mlx);
     return (0);
