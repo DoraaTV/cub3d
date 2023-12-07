@@ -13,8 +13,8 @@
 # include <ctype.h>
 # include <math.h>
 
-# define WINDOW_HEIGHT 1080.0
-# define WINDOW_WIDTH 1340.0
+# define WINDOW_HEIGHT 1080
+# define WINDOW_WIDTH 1340
 
 # define MAX_LINE_LENGTH 204//1024 // longueur maximale d'une ligne (a ajuster mais les lignes sont courtes donc ca va)
 # define MAX_MAP_SIZE_X 24 // Ajustez selon besoin
@@ -69,8 +69,6 @@ typedef struct s_parsing
 	//float;
 
 	/*mlx*/
-	void *mlx;
-	void *mlx_win;
 
 }			t_parsing;
 

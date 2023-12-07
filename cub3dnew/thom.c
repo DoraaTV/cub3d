@@ -1,5 +1,7 @@
 #include "cub3d.h"
 
+void    draw_rays(t_data *s);
+
 float pi = 3.14159265358979323846;
 
 int map[]=
@@ -52,6 +54,7 @@ int    key_event(int button, t_data *s)
     if (button == 65362) { s->player_x += s->player_dx * 5; s->player_y += s->player_dy * 5;}
     if (button == 65364) { s->player_y -= s->player_dy * 5; s->player_x -= s->player_dx * 5;}
     // drawPlayer(s);
+    draw_rays(s);
     return (0);
 }
 
@@ -175,9 +178,11 @@ void ft_pixel_put(t_data *s, int x, int y, int color) // a modif
 // (void)y;
 // (void)color;
 // // (void)dst;
-     dst = s->addr + (y * s->llen[0] + x * (s->bpp[0] / 8));
+    color = 0xff0000;
+    // printf("%d, %d\n", x, y);
+    dst = s->addr + ((int)y * s->llen[0] + (int)x * (s->bpp[0] / 8));
     *(unsigned int*)dst = color;
-    printf("color = %d\n", color);
+    // printf("color = %d\n", color);
 
 }
 
@@ -187,6 +192,7 @@ void draw_line_4(t_data *s, float y1, double lineh, float x)
     int i;
 
     i = 0;
+    // printf("d4 %f\n", lineh);
     if (lineh > WINDOW_HEIGHT)
         i = (lineh - WINDOW_HEIGHT) / 2;
     while (i < lineh)
@@ -203,28 +209,22 @@ void draw_line_4(t_data *s, float y1, double lineh, float x)
         //         exit (0);
         //     }
 
-        printf("s->ray_angle = %f\n", s->ray_angle);
+        // printf("s->ray_angle = %f\n", s->ray_angle);
 
         if ((s->ray_angle >= 0 && s->ray_angle <= 90) || (s->ray_angle >= 270 && s->ray_angle <= 360))
         {
-            printf("Condition 1 is true\n");
+            // printf("Condition 1 is true\n");
+            // printf("i %d, wh %d, lineh %f, llen %d, bpp %d, ww %d\n", i, s->w_h, lineh, s->llen[3], s->bpp[3], s->w_w);
             dst = s->parsing.we_texture_value + (int)(i * (s->w_h / lineh)) % s->w_h * s->llen[3] + (int)(x * s->w_w / 50) % s->w_w * (s->bpp[3] / 8);
-        }
-        else
-        {
-            printf("Condition 1 is false\n");
+            // printf("dst\n");
         }
 
         if (s->ray_angle >= 90 && s->ray_angle <= 270)
         {
-            printf("Condition 2 is true\n");
             dst = s->parsing.ea_texture_value + (int)(i * (s->e_h / lineh)) % s->e_h * s->llen[4] + (int)(x * s->e_w / 50) % s->e_w * (s->bpp[4] / 8);
         }
-        else
-        {
-            printf("Condition 2 is false\n");
-        }
         ft_pixel_put(s, s->i, y1, *(unsigned int*)dst);
+        // printf(" in draw 4 %d\n", s->i);
         y1++;
         i++;
     }
@@ -247,6 +247,7 @@ void draw_line_3(t_data *s, float y1, double lineh, float x)
         if (s->ray_angle > 0 && s->ray_angle <= 180)
             dst = s->parsing.so_texture_value + (int)(i * (s->s_h / lineh)) % s->s_h * s->llen[2] + (int)(x * s->s_w / 50) % s->s_w * (s->bpp[2] / 8);
         ft_pixel_put(s, s->i, y1, *(unsigned int*)dst);
+        // printf(" in draw 3 %d\n", s->i);
         y1++;
         i++;
     }
@@ -260,6 +261,7 @@ void draw_sky(t_data *s, float lineo)
     while (i < lineo)
     {
         ft_pixel_put(s, s->i, i, s->parsing.sky_value_1);
+        printf(" in sky %d\n", s->i);
         i++;
     }
 }
@@ -272,6 +274,7 @@ void draw_floor(t_data *s, double lineh, float lineo)
     while (j < WINDOW_HEIGHT)
     {
         ft_pixel_put(s, s->i, j, s->parsing.floor_value_1);
+        printf(" in floor  %d\n", s->i);
         j++;
     }
 }
@@ -286,24 +289,27 @@ void render3d(t_data *s, float x, float y, int i)
 
     ca = fixang(s->player_direction - s->ray_angle);
     len = dist(s->player_x, s->player_y, x, y);
+    // printf("%f\n", len);
     len = len * cos(degToRad(ca));
-    lineh = (50 * WINDOW_HEIGHT) / len;
+    lineh = (int)(50 * WINDOW_HEIGHT) / len;
+    // printf(" cu ocuuf %f\n", lineh);
     ch = lineh;
+    // printf("%f\n", ch);
     if (lineh > WINDOW_HEIGHT)
         lineh = WINDOW_HEIGHT;
     //lineh est la hauteur de la ligne a tracer
     //lineo est la position de la ligne a tracer
     //ch est la hauteur de la ligne a tracer
     lineo = (WINDOW_HEIGHT / 2) - (lineh / 2);
-    (void)ch;
-    (void)lineo;
     if (i == 1)
     {
         draw_line_3(s, lineo, ch, x);
     }
     else
     {
-        draw_line_4(s, lineo, ch, y);
+        // printf("%f\n", lineh);
+        draw_line_4(s, lineo, lineh, y);
+        mlx_put_image_to_window(s->mlx, s->mlx_win, s->img, 0, 0);
     }
     draw_floor(s, lineh, lineo);
     draw_sky(s, lineo);
@@ -352,11 +358,11 @@ void castrays(t_data *s, double x, double y)
             castrays2(s, x2, y2);
             return ;
         }
-        if (s->parsing.map[(int)(y2 + y / 4) + s->parsing.start_map][(int) (x2) / 50] != '0')
-        {
-            castrays2(s, x2, y2);
-            return ;
-        }
+        // if (s->parsing.map[(int)(y2 + y / 4) + s->parsing.start_map][(int) (x2) / 50] != '0')
+        // {
+        //     // castrays2(s, x2, y2);
+        //     return ;
+        // }
         x2 += x / 4;
         y2 += y / 4;
     }
@@ -369,12 +375,13 @@ void    draw_rays(t_data *s)
 
     s->ray_angle = fixang(s->player_direction - 30);
     s->i = 0;
-    while (s->i < WINDOW_WIDTH)
+    while (s->i < 1340)
     {
         x = (cos(degToRad(s->ray_angle)) * 5);
         y = (sin(degToRad(s->ray_angle)) * 5);
         castrays(s, x, y);
         s->i++;
+        // printf("%d\n", s->i);
         s->ray_angle += 60.0 / WINDOW_WIDTH;
         s->ray_angle = fixang(s->ray_angle);
     }
@@ -420,7 +427,8 @@ void print_error(const char *texture_type, const char *message)
 // }
 
 // // Fonction principale pour charger toutes les textures
-// void get_tex_path(t_data s, t_parsing *parsing) 
+// void get_tex_path(t_data s, t_parsing  (!s->no_tex) //si on a pas reussi a charger l'image avec la fonction mlx_xpm_file_to_image
+    // {*parsing) 
 // {
 //     load_texture(s, s.no_textr, parsins.no_texture_value, 1);
 //     //printf("1: %s, 2: %s\n", (char *)s.no_textr, parsins.no_texture_value);
@@ -484,42 +492,47 @@ printf("s.so_texadr = %p\n", s->no_texadr);
 return (0);
 }
 
-int parsing_init_textu(t_data s)
+int parsing_init_textu(t_data *s)
 {
     //initialision
     // game->floor_c = -1;
 	// game->ceilling_c = -1;
-	s.no_textr = NULL;
-	s.so_textr = NULL;
-	s.we_textr = NULL;
-	s.ea_textr = NULL;
-    s.keys = calloc(sizeof(int), 6); //ATTENTION UTILISATION DE CALLOC SANS LIBFT
-	s.llen = calloc(sizeof(int), 5);  //ATTENTION UTILISATION DE CALLOC SANS LIBFT
-	s.bpp = calloc(sizeof(int), 5);  //ATTENTION UTILISATION DE CALLOC SANS LIBFT
-	s.en = calloc(sizeof(int), 5);  //ATTENTION UTILISATION DE CALLOC SANS LIBFT
-	s.img = mlx_new_image(s.mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
-	s.addr = mlx_get_data_addr(s.img, &s.bpp[0],
-			&s.llen[0], &s.en[0]);
-	if (get_tex_path(&s) == 1)
+	s->no_textr = NULL;
+	s->so_textr = NULL;
+	s->we_textr = NULL;
+	s->ea_textr = NULL;
+    s->keys = calloc(sizeof(int), 6); //ATTENTION UTILISATION DE CALLOC SANS LIBFT
+	s->llen = calloc(sizeof(int), 5);  //ATTENTION UTILISATION DE CALLOC SANS LIBFT
+	s->bpp = calloc(sizeof(int), 5);  //ATTENTION UTILISATION DE CALLOC SANS LIBFT
+	s->en = calloc(sizeof(int), 5);  //ATTENTION UTILISATION DE CALLOC SANS LIBFT
+	s->img = mlx_new_image(s->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+    if (!s->img)
+        exit (1);
+	s->addr = mlx_get_data_addr(s->img, &s->bpp[0],
+			&s->llen[0], &s->en[0]);
+	if (get_tex_path(s) == 1)
         return (1);
-    get_player_pos(&s);// get_player_cord(s);
-    s.player_dx = cos(degToRad(s.player_direction)) * 8; //* P_SPEED; pas capte
-    s.player_dy = sin(degToRad(s.player_direction)) * 8;
-    draw_rays(&s);//drawPlayer(&s); ou drawrays
+    get_player_pos(s);// get_player_cord(s);
+    s->player_dx = cos(degToRad(s->player_direction)) * 8; //* P_SPEED; pas capte
+    s->player_dy = sin(degToRad(s->player_direction)) * 8;
+    draw_rays(s);//drawPlayer(&s); ou drawrays
 
-    // printf("mlx_ptr: %d, win_ptr: %d, img_ptr: %d\n", &s.mlx, s.mlx_win, s.img);
-    //  mlx_put_image_to_window(s.mlx, s.mlx_win, s.img, 0, 0);
-return 0;
+    printf("mlx_ptr: %p, win_ptr: %p, img_ptr: %p\n", &s->mlx, s->mlx_win, s->img);
+    return 0;
 }
 
 int init_window(t_data s)
 {
     s.mlx = mlx_init();
+    if (!s.mlx)
+        exit(1);
     // printf("r x = %d\n r y =%d\n", s.parsing.r_value_x, s.parsing.r_value_y);
     //get_player_pos(&s);
     mlx_get_screen_size(s.mlx, &s.parsing.r_value_x, &s.parsing.r_value_y);
     s.win= mlx_new_window(s.mlx, s.parsing.r_value_x, s.parsing.r_value_y, "cub3d");
-    if (parsing_init_textu(s) == 1)
+    if (!s.win)
+        exit (1);
+    if (parsing_init_textu(&s) == 1)
             return (1);
     // s.player_dx = cos(degToRad(s.player_direction));
     // s.player_dy = sin(degToRad(s.player_direction));
