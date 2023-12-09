@@ -107,12 +107,12 @@ static float ft_hray(t_data *s)
 
     if (s->theta == 0.f || s->theta == 3.1415926536f)
         return (3.402823e+38f);
-    printf("1 s->theta = %f\n", s->theta);
+    // printf("1 s->theta = %f\n", s->theta);
     step[0] = (s->facing_up) ? -64.f : 64.f;
     a[0] = (s->facing_up) ? (((int)s->player_x >> 6) << 6) : (((int)s->player_x >> 6) << 6) + 64.f;
     a[1] = s->player_y + (s->player_x - a[0]) / s->tan_theta;
     step[1] = -step[0] / s->tan_theta;
-    printf("1 s->theta = %f\n", s->theta);
+    // printf("1 s->theta = %f\n", s->theta);
     while (!ft_obstacles(s, (int)(a[0] + (s->facing_up ? -1 : 0)) >> 6, (int)a[1] >> 6))
     {
         a[0] += step[0];
@@ -170,7 +170,7 @@ void ft_show_wall(t_data *s, int height)
     render.line_shift = 0;
     texture = ft_wall_hit(s);
     while (render.line_shift < tmp)
-        *(s->img.data + render.line_shift++ * s->img.size_l + s->ray_angle) = s->parsing.floor_value_1;
+        *(s->img.data + render.line_shift++ * s->img.size_l + s->ray_angle) = (s->parsing.sky_value_1 << 16) | (s->parsing.sky_value_2 << 8) | s->parsing.sky_value_3;
     render.start[0] = tmp < 0 ? -tmp : 0;
     render.end[0] = tmp < 0 ? render.start[0] + WINDOW_HEIGHT : height;
     while (render.start[0] < render.end[0])
@@ -181,7 +181,7 @@ void ft_show_wall(t_data *s, int height)
 			s->a[s->vhit]);    
     }
     while (render.line_shift < WINDOW_HEIGHT)
-        *(s->img.data + render.line_shift++ * s->img.size_l + s->ray_angle) = s->parsing.floor_value_1;
+        *(s->img.data + render.line_shift++ * s->img.size_l + s->ray_angle) = (s->parsing.floor_value_1 << 16) | (s->parsing.floor_value_2 << 8) | s->parsing.floor_value_3;
 }
 
 void ft_render(t_data *s)
@@ -244,6 +244,9 @@ void ft_raycasting(t_data *s)
     s->dst_ppp = (WINDOW_WIDTH / 2.F) / tanf(0.5235987756f);
     s->cst = s->dst_ppp * 64;
     s->phi = 1.047197551f / WINDOW_WIDTH;
+
+    for (int i = s->parsing.start_map; s->parsing.map[i]; i++)
+        printf("%s\n", s->parsing.map[i]);
 
     if (!s->zbuffer || !s->mlx || !s->win || !ft_init_img(s) || !ft_init_textures(s))
         ft_error("Error, something went wrong.\n", s);
