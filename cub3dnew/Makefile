@@ -3,7 +3,7 @@ NAME		= cub3d
 SRC 		= main.c parsing1.c put_text_struct.c \
 			parsing2.c parsing_map_elements.c \
 			check_config_elements.c cub3d_game1.c \
-			thom.c
+			thom.c ft_player_pos.c moves.c
 
 
 CC 			= cc 

@@ -4,6 +4,7 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdint.h>
 # include <stdio.h>
 # include "mlx_linux/mlx_int.h"
 # include "mlx_linux/mlx.h"
@@ -72,56 +73,63 @@ typedef struct s_parsing
 
 }			t_parsing;
 
+typedef struct	s_image
+{
+	int			bpp;
+	int			size_l;
+	void		*ptr;
+	int			endian;
+	int			*data;
+}				t_image;
+
+typedef struct	s_render
+{
+	int			start[2];
+	int			end[2];
+	int			texture_start;
+	int			line_shift;
+	uint32_t	color;
+}				t_render;
 
 typedef struct s_data
 {
 	t_parsing   parsing;
+	t_image img;
+	t_image texture[5];
 
-	/*exec*/
 	void *win;
 	void *mlx;
 	void		*mlx_win;
-	void		*img;
-	//char **text_file;
 
-	/*position x et y du player*/
 	int i;
-	int player_x;
-	int player_y;
+	float player_x;
+	float player_y;
+	char pletter;
 	float player_direction;
-	float player_dx;
-	float player_dy;
-	double ray_angle;
+	int player_dx;
+	int player_dy;
+	int ray_angle;
 
-	char *addr;
-	int *bpp;
-	int *llen;
-	int w_w;
-	int w_h;
-	int e_w;
-	int e_h;
-	int s_w;
-	int s_h;
-	int n_w;
-	int n_h;
-
-	char *no_texadr;
-	char *so_texadr;
-	char *we_texadr;
-	char *ea_texadr;
-
-	char *no_tex;
-	char *so_tex;
-	char *we_tex;
-	char *ea_tex;
-
-	char *no_textr;
-	char *so_textr;
-	char *we_textr;
-	char *ea_textr;
+	int move[5];
+	float *zbuffer;
+	float dst_ppp;
+	float cst;
+	float phi;
 	int *keys;
 	int *en;
+	float alphacam;
+	float xcam;
+	float ycam;
 
+	int rows;
+	int cols;
+	float cos_beta;
+	int a[2];
+	float tan_theta;
+	int facing_up;
+	int facing_left;
+	int vhit;
+	float theta;
 
 }			t_data;
 
@@ -157,8 +165,16 @@ int put_map_in_struct(t_parsing *parsing);
 int check_nbr_directions(t_parsing *parsing); 
 
 /*EXECUTION*/
-int init_window(t_data s);
-int cub3d_game(t_parsing *parsing);
+void ft_raycasting(t_data *s);
+void ft_find_player(t_data *s);
+int		ft_key_press(int key, t_data *cub3d);
+int		ft_key_release(int key, t_data *cub3d);
+
+
+int ft_move_forward(t_data *s, int speed);
+int ft_move_left(t_data *s, int speed);
+int ft_rotateminus(t_data *s);
+int ft_rotate(t_data *s);
 
 /*GNL*/
 # ifndef BUFFER_SIZE

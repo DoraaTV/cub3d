@@ -346,35 +346,34 @@ int check_s_texture_value(char **text_file, t_parsing *parsing)
     while (text_file[line_index] != NULL) 
     {
         int i = 0;
+        int j = 0;
+
         // Sauter les espaces au début de la ligne
         while (text_file[line_index][i] == ' ')
             i++;
 
-        // Recherche manuelle de la sous-chaîne "NO" en ignorant les espaces
         while (text_file[line_index][i] != '\0') 
         {
-            if (strncmp(&text_file[line_index][i], "S ", 2) == 0) 
+             if (strncmp(&text_file[line_index][i], "S ", 2) == 0)
             {
                 char *s = "S ";
                 if (check_texture_value(&text_file[line_index], s) == 0) 
                 {
-                    i = i + 2; // Sauter "NO"
+                    i = i + 2;
+                    
+                    while (text_file[line_index][i] == ' ')
+                    {
+                        i++;
+                        j++;
+                    }
                     // i pointe maintenant au début du chemin de la texture
                     parsing->s_texture_value = strdup(&text_file[line_index][i]);
-                    
-                    // int fd = open(parsing->s_texture_value, O_RDONLY);
-                    // if (fd < 0 || !parsing->s_texture_value) 
-                    // {
-                    //     free(parsing->s_texture_value);
-                    //     printf("Error: Failed to open the file\n");
-                    //     return 1;
-                    // }
+                    // Ajoutez le reste de votre logique ici (par exemple, vérification du chemin de texture)
                     return 0;
                 }
             } 
             else 
             {
-                // Si ce n'est pas "S", passer au caractère suivant
                 i++;
             }
         }
@@ -385,6 +384,7 @@ int check_s_texture_value(char **text_file, t_parsing *parsing)
     return 1;
 }
 
+
 int check_ea_texture_value(char **text_file, t_parsing *parsing) 
 {
     int line_index = 0;
@@ -392,36 +392,35 @@ int check_ea_texture_value(char **text_file, t_parsing *parsing)
     while (text_file[line_index] != NULL) 
     {
         int i = 0;
+        int j = 0;
+
         // Sauter les espaces au début de la ligne
         while (text_file[line_index][i] == ' ')
             i++;
 
-        // Recherche manuelle de la sous-chaîne "EA" en ignorant les espaces
         while (text_file[line_index][i] != '\0') 
         {
             if (strncmp(&text_file[line_index][i], "EA", 2) == 0) 
             {
-                char *ea = "EA";
+                char *ea = "EA ";
                 if (check_texture_value(&text_file[line_index], ea) == 0) 
                 {
-                    i = i + 2; // Sauter "EA"
+                    i = i + 2;
+                    
+                    
+                    while (text_file[line_index][i] == ' ')
+                    {
+                        i++;
+                        j++;
+                    }
                     // i pointe maintenant au début du chemin de la texture
                     parsing->ea_texture_value = strdup(&text_file[line_index][i]);
-
-                    // int fd = open(parsing->ea_texture_value, O_RDONLY);
-                    // if (fd < 0 || !parsing->ea_texture_value) 
-                    // {
-                    //     free(parsing->ea_texture_value);
-                    //     printf("Error: Failed to open the file\n");
-                    //     return 1;
-                    // }
-                    //printf("ici = %s\n", parsing->no_texture_value);
+                    // Ajoutez le reste de votre logique ici (par exemple, vérification du chemin de texture)
                     return 0;
                 }
             } 
             else 
             {
-                // Si ce n'est pas "EA", passer au caractère suivant
                 i++;
             }
         }
@@ -439,35 +438,35 @@ int check_we_texture_value(char **text_file, t_parsing *parsing)
     while (text_file[line_index] != NULL) 
     {
         int i = 0;
+        int j = 0;
+
         // Sauter les espaces au début de la ligne
         while (text_file[line_index][i] == ' ')
             i++;
 
-        // Recherche manuelle de la sous-chaîne "WE" en ignorant les espaces
         while (text_file[line_index][i] != '\0') 
         {
             if (strncmp(&text_file[line_index][i], "WE", 2) == 0) 
             {
-                char *we = "WE";
+                char *we = "WE ";
                 if (check_texture_value(&text_file[line_index], we) == 0) 
                 {
-                    i = i + 2; // Sauter "WE"
+                    i = i + 2;
+                    
+                    
+                    while (text_file[line_index][i] == ' ')
+                    {
+                        i++;
+                        j++;
+                    }
                     // i pointe maintenant au début du chemin de la texture
                     parsing->we_texture_value = strdup(&text_file[line_index][i]);
-                    
-                    // int fd = open(parsing->we_texture_value, O_RDONLY);
-                    // if (fd < 0 || !parsing->we_texture_value) 
-                    // {
-                    //     free(parsing->we_texture_value);
-                    //     printf("Error: Failed to open the file\n");
-                    //     return 1;
-                    // }
+                    // Ajoutez le reste de votre logique ici (par exemple, vérification du chemin de texture)
                     return 0;
                 }
             } 
             else 
             {
-                // Si ce n'est pas "WE", passer au caractère suivant
                 i++;
             }
         }
@@ -485,6 +484,8 @@ int check_so_texture_value(char **text_file, t_parsing *parsing)
     while (text_file[line_index] != NULL) 
     {
         int i = 0;
+        int j = 0;
+
         // Sauter les espaces au début de la ligne
         while (text_file[line_index][i] == ' ')
             i++;
@@ -494,26 +495,25 @@ int check_so_texture_value(char **text_file, t_parsing *parsing)
         {
             if (strncmp(&text_file[line_index][i], "SO", 2) == 0) 
             {
-                char *so = "SO";
+                char *so = "SO ";
                 if (check_texture_value(&text_file[line_index], so) == 0) 
                 {
-                    i = i + 2; // Sauter "NO"
+                    i = i + 2;
+                    
+                    
+                    while (text_file[line_index][i] == ' ')
+                    {
+                        i++;
+                        j++;
+                    }
                     // i pointe maintenant au début du chemin de la texture
                     parsing->so_texture_value = strdup(&text_file[line_index][i]);
-                    
-                    // int fd = open(parsing->so_texture_value, O_RDONLY);
-                    // if (fd < 0 || !parsing->so_texture_value) 
-                    // {
-                    //     free(parsing->so_texture_value);
-                    //     printf("Error: Failed to open the file\n");
-                    //     return 1;
-                    // }
+                    // Ajoutez le reste de votre logique ici (par exemple, vérification du chemin de texture)
                     return 0;
                 }
             } 
             else 
             {
-                // Si ce n'est pas "NO", passer au caractère suivant
                 i++;
             }
         }
@@ -531,6 +531,8 @@ int check_no_texture_value(char **text_file, t_parsing *parsing)
     while (text_file[line_index] != NULL) 
     {
         int i = 0;
+        int j = 0;
+
         // Sauter les espaces au début de la ligne
         while (text_file[line_index][i] == ' ')
             i++;
@@ -544,17 +546,16 @@ int check_no_texture_value(char **text_file, t_parsing *parsing)
                 if (check_texture_value(&text_file[line_index], no) == 0) 
                 {
                     i = i + 2; // Sauter "NO"
+                    
+                    // Compter les espaces après "NO"
+                    while (text_file[line_index][i] == ' ')
+                    {
+                        i++;
+                        j++;
+                    }
                     // i pointe maintenant au début du chemin de la texture
                     parsing->no_texture_value = strdup(&text_file[line_index][i]);
-                    
-                    // int fd = open(parsing->no_texture_value, O_RDONLY);
-                    // if (fd < 0 || !parsing->no_texture_value) 
-                    // {
-                    //     free(parsing->no_texture_value);
-                    //     printf("Error: Failed to open the file\n");
-                    //     return 1;
-                    // }
-                    /*if (open(parsing->no_texture_value, O_RDONLY) < 0)*/
+                    // Ajoutez le reste de votre logique ici (par exemple, vérification du chemin de texture)
                     return 0;
                 }
             } 
@@ -570,6 +571,7 @@ int check_no_texture_value(char **text_file, t_parsing *parsing)
     printf("Error : NO texture value is invalid\n");
     return 1;
 }
+
 
 int parsing_textures(char **text_file, t_parsing *parsing)
 {
