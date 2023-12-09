@@ -110,7 +110,7 @@ typedef struct s_data
 	int player_dy;
 	int ray_angle;
 
-	int move[5];
+	int move[6];
 	float *zbuffer;
 	float dst_ppp;
 	float cst;

@@ -42,7 +42,7 @@ int		ft_key_release(int key, t_data *cub3d)
 	return (1);
 }
 
-ft_move_forward(t_data *s, int speed)
+int ft_move_forward(t_data *s, int speed)
 {
     float new_x;
     float new_y;
