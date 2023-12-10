@@ -9,6 +9,9 @@ void ft_init_variables(t_data *s)
     s->zbuffer = (float *)malloc(sizeof(float *) * WINDOW_WIDTH);
     s->mlx = mlx_init();
     s->alphacam = 0.f;
+    s->nbr_sprites = 0;
+    s->a[0] = 0;
+    s->a[1] = 0;
     s->win = mlx_new_window(s->mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
     while (i < 5)
         s->texture[i++].ptr = NULL;
@@ -89,28 +92,31 @@ static void ft_rays(t_data *s)
         s->theta -= 6.283185f;
     // printf("s->theta = %f\n", s->theta);
     s->cos_beta = cosf(s->alphacam - s->theta);
-    s->tan_theta = tan(s->theta);
-    s->facing_up = (s->theta < 3.14159f) ? 1 : 0;
+    s->tan_theta = tanf(s->theta);
+    s->facing_up = (s->theta < 3.141593f) ? 1 : 0;
     s->facing_left = (s->theta > 1.570796f && s->theta < 4.712389f) ? 1 : 0;
     s->vhit = 0;
 }
 
 static int ft_obstacles(t_data *s, int x, int y)
 {
-    // float sprite_cam[2];
+    float sprite_cam[2];
     // int i;
     // (void)s, (void)x, (void)y;
-    // i = x + s->parsing.start_map;
-    if (x <= 0 || x >= s->rows || y < 0 || y >= s->cols)
-        return (1);
-    // if (s->parsing.map[i][y] < '2')
-    //     return (s->parsing.map[i][y] == '1');
-    // s->sprite[s->nbr_sprites].x = i;
-    // s->sprite[s->nbr_sprites].y = y;
-    // sprite_cam[0] = (i << 6) + 32 - s->player_x;
-    // sprite_cam[1] = (y << 6) + 32 - s->player_y;
-    // s->sprite[s->nbr_sprites].dst = sprite_cam[0] * sprite_cam[0] + sprite_cam[1] * sprite_cam[1];
-    // s->nbr_sprites++;
+    x = x + s->parsing.start_map;
+    if (x <= s->parsing.start_map || x >= s->rows || y < 0 || y > s->cols)
+		return (1);
+    if (s->parsing.map[x][y] <= '1')
+        return (s->parsing.map[x][y] == '1');
+    s->sprite[s->nbr_sprites].x = x;
+    s->sprite[s->nbr_sprites].y = y;
+    sprite_cam[0] = (x << 6) + 32 - s->player_x;
+    sprite_cam[1] = (y << 6) + 32 - s->player_y;
+    (void)sprite_cam;
+    // printf("%d %d %d\n", x, y, s->nbr_sprites);
+    s->sprite[s->nbr_sprites].dst = sprite_cam[0] * sprite_cam[0] + sprite_cam[1] * sprite_cam[1];
+    s->nbr_sprites++;
+    printf("%d %d %c\n", x, y, s->parsing.map[x][y]);
     // s->parsing.map[x][y] -= 8;
     return (0);
 }
@@ -120,14 +126,13 @@ static float ft_hray(t_data *s)
     float a[2];
     float step[2];
 
-    if (s->theta == 0.f || s->theta == 3.1415926536f)
-        return (3.402823e+38f);
-    // printf("1 s->theta = %f\n", s->theta);
+    if (s->theta == 0.f || s->theta == 3.141593f)
+		return (3.402823e+38f);
+    printf("1 s->theta = %f\n", s->tan_theta);
     step[0] = (s->facing_up) ? -64.f : 64.f;
     a[0] = (s->facing_up) ? (((int)s->player_x >> 6) << 6) : (((int)s->player_x >> 6) << 6) + 64.f;
     a[1] = s->player_y + (s->player_x - a[0]) / s->tan_theta;
     step[1] = -step[0] / s->tan_theta;
-    // printf("2 s->theta = %f\n", s->theta);
     while (!ft_obstacles(s, ((int)(a[0] + (s->facing_up ? -1 : 0))) >> 6, (int)a[1] >> 6))
     {
         a[0] += step[0];
@@ -166,13 +171,9 @@ static int ft_wall_hit(t_data *s)
         else
             return (1);
     }
-    else
-    {
-        if (s->facing_left)
-            return (2);
-        else
+    if (s->facing_left)
+        return (2);
             return (3);
-    }
 }
 
 void ft_show_wall(t_data *s, int height)
@@ -205,7 +206,8 @@ void ft_render(t_data *s)
 
     s->ray_angle = WINDOW_WIDTH - 1;
     s->theta = s->alphacam - 0.5235987756f;
-    printf("s->theta = %f alphacam %f\n", s->theta, s->alphacam);
+    s->nbr_sprites = 0;
+    // printf("s->theta = %f alphacam %f\n", s->theta, s->alphacam);
     while (s->ray_angle >= 0)
     {
         ft_rays(s);
