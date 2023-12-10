@@ -6,7 +6,7 @@
 /*   By: parallels <parallels@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 17:44:10 by madjogou          #+#    #+#             */
-/*   Updated: 2023/12/09 16:48:32 by parallels        ###   ########.fr       */
+/*   Updated: 2023/12/10 16:11:02 by parallels        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,6 @@ int main(int ac, char **av)
 
     /*execution*/
     ft_raycasting(&data);
-    exit (1);
     //fonction exec si parsing ok
+    return (0);
 }

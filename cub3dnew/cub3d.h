@@ -15,6 +15,7 @@
 # include <math.h>
 
 # define WINDOW_HEIGHT 1080
+# define M_PI 3.14159265358979323846
 # define WINDOW_WIDTH 1340
 
 # define MAX_LINE_LENGTH 204//1024 // longueur maximale d'une ligne (a ajuster mais les lignes sont courtes donc ca va)
@@ -75,11 +76,13 @@ typedef struct s_parsing
 
 typedef struct	s_image
 {
-	int			bpp;
-	int			size_l;
-	void		*ptr;
-	int			endian;
-	int			*data;
+	void *img;
+	char *addr;
+	int bpp;
+	int endian;
+	int line_l;
+	int			width;
+	int			height;
 }				t_image;
 
 typedef struct	s_sprite
@@ -102,12 +105,11 @@ typedef struct s_data
 {
 	t_parsing   parsing;
 	t_image img;
-	t_image texture[5];
+	t_image *texture;
 	t_sprite *sprite;
 
 	void *win;
 	void *mlx;
-	void		*mlx_win;
 
 	int i;
 	float player_x;

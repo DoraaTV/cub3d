@@ -13,6 +13,7 @@ void	init_struct(t_parsing	*parsing)
     parsing->sky_value_3 = -1;  // Valeur par défaut
 
     //init textures
+    
     parsing->no_texture_value = NULL;
     parsing->we_texture_value = NULL;
     parsing->so_texture_value = NULL;

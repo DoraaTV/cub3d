@@ -1,4 +1,4 @@
-NAME		= cub3d
+NAME		= cub3D
 
 SRC 		= main.c parsing1.c put_text_struct.c \
 			parsing2.c parsing_map_elements.c \
