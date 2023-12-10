@@ -82,6 +82,13 @@ typedef struct	s_image
 	int			*data;
 }				t_image;
 
+typedef struct	s_sprite
+{
+	int			x;
+	int			y;
+	float		dst;
+}				t_sprite;
+
 typedef struct	s_render
 {
 	int			start[2];
@@ -96,6 +103,7 @@ typedef struct s_data
 	t_parsing   parsing;
 	t_image img;
 	t_image texture[5];
+	t_sprite *sprite;
 
 	void *win;
 	void *mlx;
@@ -120,6 +128,7 @@ typedef struct s_data
 	float alphacam;
 	float xcam;
 	float ycam;
+	int nbr_sprites;
 
 	int rows;
 	int cols;

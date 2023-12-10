@@ -77,6 +77,7 @@ int ft_move_left(t_data *s, int speed)
 int ft_rotateminus(t_data *s)
 {
     s->alphacam = s->alphacam + 0.035f;
+    // printf("s->alphacam = %f\n", s->alphacam);
     if (s->alphacam > 6.2831853072f)
         s->alphacam -= 6.2831853072f;
     return (1);
@@ -85,6 +86,7 @@ int ft_rotateminus(t_data *s)
 int ft_rotate(t_data *s)
 {
     s->alphacam = s->alphacam - 0.035f;
+    // printf("s->alphacam = %f\n", s->alphacam);
     if (s->alphacam < 0.f)
         s->alphacam += 6.2831853072f;
     return (1);
