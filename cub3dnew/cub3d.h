@@ -14,9 +14,9 @@
 # include <ctype.h>
 # include <math.h>
 
-# define WINDOW_HEIGHT 1080
+# define WINDOW_HEIGHT 1280
 # define M_PI 3.14159265358979323846
-# define WINDOW_WIDTH 1340
+# define WINDOW_WIDTH 1280
 
 # define MAX_LINE_LENGTH 204//1024 // longueur maximale d'une ligne (a ajuster mais les lignes sont courtes donc ca va)
 # define MAX_MAP_SIZE_X 24 // Ajustez selon besoin
@@ -38,9 +38,12 @@ typedef struct s_parsing
 	int floor_value_1;
 	int floor_value_2;
 	int floor_value_3;
+	int floor_color;
+
 	int sky_value_1;
 	int sky_value_2;
 	int sky_value_3;
+	int ceiling_color;
 
 	/*valeurs pour la resolution*/
 	int r_value_x;
@@ -92,14 +95,21 @@ typedef struct	s_sprite
 	float		dst;
 }				t_sprite;
 
-typedef struct	s_render
+typedef struct	s_ray
 {
-	int			start[2];
-	int			end[2];
-	int			texture_start;
-	int			line_shift;
-	uint32_t	color;
-}				t_render;
+	float dir_x;
+	float dir_y;
+	int step_x;
+	int step_y;
+	float vert_x;
+	float vert_y;
+	float horz_x;
+	float horz_y;
+	float vert_dist;
+	float horz_dist;
+	float vert_w;
+	float horz_w;
+}	t_ray;
 
 typedef struct s_data
 {
@@ -119,6 +129,7 @@ typedef struct s_data
 	int player_dx;
 	int player_dy;
 	int ray_angle;
+	float txt_width;
 
 	int move[6];
 	float *zbuffer;

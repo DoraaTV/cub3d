@@ -18,6 +18,8 @@ void ft_find_player(t_data *s)
     int j;
 
     i = s->parsing.start_map;
+   
+   // printf("le i = %d\n", i);
     while (s->parsing.map[i])
     {
         j = 0;
@@ -25,10 +27,12 @@ void ft_find_player(t_data *s)
         {
             if (s->parsing.map[i][j] == 'N' || s->parsing.map[i][j] == 'S' || s->parsing.map[i][j] == 'E' || s->parsing.map[i][j] == 'W')
             {
-                ft_compare(s->parsing.map[i][j], s);
-                s->player_x = (float)i + 0.2f;
-                s->player_y = (float)j + 0.2f;
+                s->player_x = (float)j + 0.2f;
+                s->player_y = (float)i - s->parsing.start_map + 0.2f;
                 s->cols = (j > s->cols) ? j : s->cols;
+                printf("le x = %f\n", s->player_x);
+                printf("le y = %f\n", s->player_y);
+                ft_compare(s->parsing.map[i][j], s);
             }
             j++;
         }

@@ -2,6 +2,16 @@
 
 //enlever char **text_file car deja parsing->text_file
 
+int	rgb_to_hex_floor(t_parsing *parsing)
+{
+	return (parsing->floor_value_1 << 16 | parsing->floor_value_2 << 8 | parsing->floor_value_3);
+}
+
+int	rgb_to_hex_sky(t_parsing *parsing)
+{
+	return (parsing->sky_value_1 << 16 | parsing->sky_value_2 << 8 | parsing->sky_value_3);
+}
+
 int is_digit(char c) 
 {
     if (c >= '0' && c <= '9')
@@ -84,9 +94,11 @@ int parsing_rgbs_sky(char **text_file, t_parsing *parsing)
                     parsing->sky_value_1 = r;
                     parsing->sky_value_2 = g;
                     parsing->sky_value_3 = b;
-                    //printf("1s = %d\n", parsing->sky_value_1);
-                    //printf("2s = %d\n", parsing->sky_value_2);
-                    //printf("3s = %d\n", parsing->sky_value_3);
+		            parsing->ceiling_color = rgb_to_hex_sky(parsing);
+                    //printf("parsing->ceiling_color = %u\n", parsing->ceiling_color);
+                    // printf("1s = %d\n", parsing->sky_value_1);
+                    // printf("2s = %d\n", parsing->sky_value_2);
+                    // printf("3s = %d\n", parsing->sky_value_3);
                     return 0;  // Valeurs RGB valides trouvées
                 }
                 
@@ -122,6 +134,8 @@ int parsing_rgbs_floor(char **text_file, t_parsing *parsing)
                     parsing->floor_value_1 = r;
                     parsing->floor_value_2 = g;
                     parsing->floor_value_3 = b;
+                    parsing->floor_color = rgb_to_hex_floor(parsing);
+                    //printf("parsing->floor_color = %u\n", parsing->floor_color);
                     //printf("1f = %d\n", parsing->floor_value_1);
                     //printf("2f = %d\n", parsing->floor_value_2);
                     //printf("3f = %d\n", parsing->floor_value_3);

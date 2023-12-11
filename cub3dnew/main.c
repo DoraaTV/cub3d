@@ -6,7 +6,7 @@
 /*   By: parallels <parallels@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 17:44:10 by madjogou          #+#    #+#             */
-/*   Updated: 2023/12/10 16:11:02 by parallels        ###   ########.fr       */
+/*   Updated: 2023/12/10 23:22:16 by parallels        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ int main(int ac, char **av)
     /*parsing*/
     if (parsing(av[1], &data) == 1)
         return (1);
-
+    for (int i = data.parsing.start_map; data.parsing.map[i]; i++)
+        printf("map[%d] = %s\n", i, data.parsing.map[i]);
     /*execution*/
     ft_raycasting(&data);
     //fonction exec si parsing ok

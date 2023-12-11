@@ -42,15 +42,11 @@ int parsing(char *file_cub3d_name, t_data *data)
     // g_allocs = malloc(sizeof(t_allocs *));
 	// *g_allocs = NaULL;
 
-    int fd = open(file_cub3d_name, O_RDONLY);
     init_struct(&data->parsing);
 
     //parsing pointe vers la même structure que data.parsing
     parsing = &data->parsing;
-    if (fd != -1)
-        {
-        // Le fichier existe.
-        if (put_text_struct(&data->parsing) == 1)
+        if (put_text_struct(file_cub3d_name, &data->parsing) == 1)
         {
             printf("Error : text cannot be put into structure\n");
             return 1;
@@ -78,14 +74,7 @@ int parsing(char *file_cub3d_name, t_data *data)
             //faire mes frees si parsing errone
             return 1;
         }
-        
-        close(fd); // Ferme le descripteur de fichier si terminé (a revoir si ok)
-    } 
-    else 
-    {
-        printf("Error : the file does not exist\n");
-        return (1);
-    }
+         // Ferme le descripteur de fichier si terminé (a revoir si ok)
 // parsing->mlx = mlx_init();
 // parsing->mlx_win = mlx_new_window(parsing->mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
 // ft_init(parsing); //equivalent de ft_init(game);
