@@ -248,6 +248,7 @@ void ft_move (t_data *s, int direction)
     }
     s->player_x += dist_x;
     s->player_y += dist_y;
+    printf("lala= %f\n", s->player_x);
 }
 
 int ft_keys(int key, t_data *s)
@@ -300,6 +301,8 @@ static void init_ray(t_data *s, t_ray *ray, float angle)
     ray->horz_y = (int)s->player_y;
     if (ray->step_y > 0)
         ray->horz_y += 1.0f;
+        	 	//  printf("ray->horz_y  = %f\n", ray->horz_y);
+
 }
 
 static void ft_ray2(t_data *s, t_ray *ray)
@@ -361,7 +364,7 @@ float ft_ray(t_data *s, float angle)
         {
             if (s->parsing.map[(int)ray.vert_y + s->parsing.start_map][(int)ray.vert_x + (ray.step_x - 1) / 2] == '1')
             {
-                // printf("ray.vert_dist = %f\n ray.step_x + 1 %d\n ray.vert_w %f\n", ray.vert_dist, ray.step_x + 1, ray.vert_w);
+                //  printf("ray.vert_dist = %f\n ray.step_x + 1 %d\n ray.vert_w %f\n", ray.vert_dist, ray.step_x + 1, ray.vert_w);
                 return (save_color(s, ray.vert_dist, ray.step_x + 1, ray.vert_w));
             }
             else
@@ -369,8 +372,11 @@ float ft_ray(t_data *s, float angle)
         }
         else
         {
-            if (s->parsing.map[(int)ray.horz_y - (ray.step_y - 1) / 2 + s->parsing.start_map][(int)ray.horz_x] == '1')
+            if (s->parsing.map[((int)ray.horz_y + (ray.step_y - 1) / 2) + s->parsing.start_map][(int)ray.horz_x] == '1')
+            {
+                // printf("ray.horz_dist = %f\n ray.step_y + 1 %d\n ray.horz_w %f\n", ray.horz_dist, ray.step_y + 1, ray.horz_w);
                 return (save_color(s, ray.horz_dist, ray.step_y + 2, ray.horz_w));
+            }
             else
                 ray.horz_y += ray.step_y;
         }
@@ -415,7 +421,7 @@ void ft_raycast(t_data *s)
     angle = s->player_direction - fov / 2;
     dv = fov / (WINDOW_WIDTH - 1);
     x = 0;
-    (void)angle;
+    //(void)angle;
     while (x < WINDOW_WIDTH)
     {
         draw_line(s, x, ft_ray(s, angle) * cos(s->player_direction - angle));

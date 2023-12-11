@@ -30,8 +30,9 @@ int correct_number(t_parsing *parsing)
             // + changer car space possible au debut
             if (current_char == ' ') //&& current_char + 1 == '\n')
             {
-                printf("Error: Do not put spaces in the map\n");
-                return 1;
+                line[i] = '1';//current_char = 1;
+                //  printf("Error: Do not put spaces in the map\n");
+                // return 1;
             }
 
             if (strchr(player_chars, current_char) == NULL)

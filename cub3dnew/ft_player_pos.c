@@ -17,22 +17,23 @@ void ft_find_player(t_data *s)
     int i;
     int j;
 
-    i = s->parsing.start_map;
+    i = 0;
    
    // printf("le i = %d\n", i);
-    while (s->parsing.map[i])
+    while (s->parsing.map[i + s->parsing.start_map])
     {
         j = 0;
-        while (s->parsing.map[i][j])
+        while (s->parsing.map[i + s->parsing.start_map][j])
         {
-            if (s->parsing.map[i][j] == 'N' || s->parsing.map[i][j] == 'S' || s->parsing.map[i][j] == 'E' || s->parsing.map[i][j] == 'W')
+            if (strchr("NSEW", s->parsing.map[i + s->parsing.start_map][j]))
             {
                 s->player_x = (float)j + 0.2f;
-                s->player_y = (float)i - s->parsing.start_map + 0.2f;
-                s->cols = (j > s->cols) ? j : s->cols;
+                s->player_y = (float)i + 0.2f;
+                // s->cols = (j > s->cols) ? j : s->cols;
                 printf("le x = %f\n", s->player_x);
                 printf("le y = %f\n", s->player_y);
-                ft_compare(s->parsing.map[i][j], s);
+                ft_compare(s->parsing.map[i + s->parsing.start_map][j], s);
+                return ;
             }
             j++;
         }

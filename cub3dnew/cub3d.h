@@ -128,7 +128,7 @@ typedef struct s_data
 	float player_direction;
 	int player_dx;
 	int player_dy;
-	int ray_angle;
+	float ray_angle;
 	float txt_width;
 
 	int move[6];
