@@ -56,17 +56,17 @@ int parsing(char *file_cub3d_name, t_data *data)
         //printf("ici 2 = %s\n", parsing->map[15]);
         //printf("ici 3 = %s\n", parsing->config_elements[5]);
 
-        if (*parsing->num_lines_ptr == 0)
-            {
-                printf("Error : the file is empty\n");
-                return 1;
-            }
+        // if (*parsing->num_lines_ptr == 0)
+        //     {
+        //         printf("Error : the file is empty\n");
+        //         return 1;
+        //     }
 
-        if (!parsing->map || !parsing->config_elements) 
-        {
-            printf("Error: struct is not properly initialized\n");
-            return 1;
-        }
+        // if (!parsing->map || !parsing->config_elements) 
+        // {
+        //     printf("Error: struct is not properly initialized\n");
+        //     return 1;
+        // }
         // printf("ici = %s\n", parsing->text_file[9]);
       
         if (parsing_cub3d(parsing->config_elements, &data->parsing) == 1)

@@ -88,13 +88,6 @@ typedef struct	s_image
 	int			height;
 }				t_image;
 
-typedef struct	s_sprite
-{
-	int			x;
-	int			y;
-	float		dst;
-}				t_sprite;
-
 typedef struct	s_ray
 {
 	float dir_x;
@@ -116,7 +109,6 @@ typedef struct s_data
 	t_parsing   parsing;
 	t_image img;
 	t_image *texture;
-	t_sprite *sprite;
 
 	void *win;
 	void *mlx;
@@ -124,48 +116,16 @@ typedef struct s_data
 	int i;
 	float player_x;
 	float player_y;
-	char pletter;
 	float player_direction;
-	int player_dx;
-	int player_dy;
-	float ray_angle;
 	float txt_width;
 
-	int move[6];
-	float *zbuffer;
-	float dst_ppp;
-	float cst;
-	float phi;
-	int *keys;
-	int *en;
-	float alphacam;
-	float xcam;
-	float ycam;
-	int nbr_sprites;
-
-	int rows;
-	int cols;
-	float cos_beta;
 	int a[2];
-	float tan_theta;
-	int facing_up;
 	int facing_left;
 	int vhit;
 	float theta;
 
 }			t_data;
 
-/*enum {
-	ON_KEYDOWN = 2,
-	ON_KEYUP = 3,
-	ON_BUTTONPRESS = 4,
-	ON_MOUSEUP = 5,
-	ON_MOUSEMOVE = 6,
-	ON_EXPOSE = 12,
-	ON_DESTROY = 17
-};*/
-
-/*PARSING*/
 int check_no_wall();
 int map_closed();
 
