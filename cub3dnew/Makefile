@@ -17,7 +17,7 @@ RM			= rm -rf
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(OBJ_DIR)
-	clang -g -Wall -Werror -Wextra -I/usr/include -Imlx_linux -O3 -c $< -o $@
+	gcc -g -Wall -Werror -Wextra -I/usr/include -Imlx_linux -O3 -c $< -o $@
 
 all	: $(NAME)
 

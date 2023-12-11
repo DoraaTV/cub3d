@@ -7,6 +7,7 @@ int count_empty_lines_after(char **lines, int start_index, int num_lines)
 
     while (i < num_lines) 
     {
+        // printf("%s\n", lines[i]);
         if (lines[i][0] == '\0' || (lines[i][0] == '\n' && lines[i][1] == '\0')) 
         {
             // Une ligne est vide si elle est soit complètement vide (ligne vide) soit composée uniquement d'un retour à la ligne.
@@ -46,11 +47,11 @@ int check_map_section(t_parsing *parsing, int num_lines)
         if (sign_count == 7)
         {
         int nb_ligne_vide = count_empty_lines_after(parsing->map, i, num_lines);
-        
+        parsing->ligne_vide = nb_ligne_vide;
         parsing->start_map = nb_ligne_vide + i + 1;
-             //printf("depart de la map = %s\n", parsing->map[parsing->start_map]);
-           // printf("\n- map config l15 --------> = %s\n", parsing->map[15]);
-            //printf("\n- element de config l5 = %s\n", parsing->config_elements[5]);
+        //      printf("depart de la map = %s\n", parsing->map[parsing->start_map]);
+        //    printf("\n- map config l15 --------> = %s\n", parsing->map[15]);
+        //     printf("\n- element de config l5 = %s\n", parsing->config_elements[5]);
                 return 0; // Vous êtes sur la carte
         }
             j++;
@@ -109,6 +110,7 @@ void process_line(t_parsing *parsing, int *config_size, int *map_size)
             resize_and_copy(&parsing->config_elements, *parsing->num_lines_ptr, *config_size);   
         }
         parsing->config_elements[*parsing->num_lines_ptr] = strdup(parsing->buffer);
+        parsing->config_count++;
     } 
     else 
     {
@@ -118,7 +120,11 @@ void process_line(t_parsing *parsing, int *config_size, int *map_size)
             (*map_size) *= 2;
             resize_and_copy(&parsing->map, *parsing->num_lines_ptr, *map_size);
         }
-        parsing->map[*parsing->num_lines_ptr] = strdup(parsing->buffer);
+        //if (parsing->buffer)
+        //{
+            parsing->map[*parsing->num_lines_ptr] = strdup(parsing->buffer);
+            parsing->map_count++;
+        // }
         //printf("2ph = %s\n", parsing->config_elements[*parsing->num_lines_ptr]);
     }
     (*parsing->num_lines_ptr)++;
@@ -164,18 +170,20 @@ int put_text_struct(char *file_cub3d_name, t_parsing *parsing)
     printf("ici = %s\n,", file_cub3d_name);
 
     init_read_variables(parsing);
-    parsing->map = (char **)malloc(config_size * sizeof(char *));
-    parsing->config_elements = (char **)malloc(map_size * sizeof(char *));
+    // parsing->map = (char **)malloc(config_size * sizeof(char *));
+    parsing->map = (char **)calloc(config_size, sizeof(char *));
+    // parsing->config_elements = (char **)malloc(map_size * sizeof(char *));
+    parsing->config_elements = (char **)calloc(map_size, sizeof(char *));
 
     while (read_file(fd, &parsing->bytes_read, &parsing->current_char) != 0) 
     {
        
-        if (check_too_much_elmts(parsing->map[7]) == 1)
-        {
-            fprintf(stderr, "Error : too many configuration elements\n");
-        //printf("Error : too many configuration elements\n");
-            return 1;
-        }
+        // if (check_too_much_elmts(parsing->map[7]) == 1)
+        // {
+        //     fprintf(stderr, "Error : too many configuration elements\n");
+        // //printf("Error : too many configuration elements\n");
+        //     return 1;
+        // }
 
         if (parsing->current_char == '\n') 
         {
@@ -193,9 +201,12 @@ int put_text_struct(char *file_cub3d_name, t_parsing *parsing)
             return 1;
         }
     }
+    parsing->config_elements[parsing->config_count + 1] = NULL;
     if (parsing->line_index > 0) 
             process_line(parsing, &config_size, &map_size);
+    //printf("CALCUL %d\n", parsing->map_count + parsing->start_map);
 
+    // parsing->map[parsing->map_count + parsing->start_map - 1] = NULL;
     //printf("ici = %s\n", parsing->config_elements[5]);
     //close(fd);
     return 0;

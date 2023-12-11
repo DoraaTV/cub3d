@@ -6,7 +6,7 @@
 /*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 17:44:10 by madjogou          #+#    #+#             */
-/*   Updated: 2023/12/11 15:51:45 by thrio            ###   ########.fr       */
+/*   Updated: 2023/12/11 17:22:01 by thrio            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,11 @@ int main(int ac, char **av)
     /*parsing*/
     if (parsing(av[1], &data) == 1)
         return (1);
-    /*execution*/
+    
+    int i = -1;
+    while (++i < data.parsing.config_count)
+        free(data.parsing.config_elements[i]);
+    free(data.parsing.config_elements);
 
     ft_raycasting(&data);
     //fonction exec si parsing ok

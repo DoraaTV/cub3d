@@ -2,6 +2,47 @@
 
 //enlever char **text_file car deja parsing->text_file
 
+void free_texture(t_parsing *parsing);
+
+int free_parsing2(t_parsing *parsing)
+{
+    free_texture(parsing);
+    int i = -1;
+    while (++i < parsing->config_count)
+        free(parsing->config_elements[i]);
+    free(parsing->config_elements);
+    free(parsing->map);
+    exit(1);
+    return 1;
+}
+
+int free_parsing(t_parsing *parsing)
+{
+    int i = -1;
+    free_texture(parsing);
+    while (++i < parsing->config_count)
+        free(parsing->config_elements[i]);
+    free(parsing->config_elements);
+    i = 0;
+    i = parsing->config_count;
+    while (i < parsing->start_map)
+    {
+        free(parsing->map[i]);
+        i++;
+    }
+    i = 0;
+    
+    while (i < parsing->map_count - parsing->ligne_vide)
+    {
+        if(parsing->map[i + parsing->start_map])
+            free(parsing->map[i + parsing->start_map]);
+        i++;
+    }
+    free(parsing->map);
+    exit (1);
+    return (0);
+}
+
 int	rgb_to_hex_floor(t_parsing *parsing)
 {
 	return (parsing->floor_value_1 << 16 | parsing->floor_value_2 << 8 | parsing->floor_value_3);
@@ -20,7 +61,7 @@ int is_digit(char c)
 		return (0);
 }
 
-int parse_rgb(char *str, int *r, int *g, int *b) 
+int parse_rgb(char *str, int *r, int *g, int *b, t_parsing *parsing) 
 {
     //changer les messages d'erreur quand lettres alphabetiques
 
@@ -37,6 +78,7 @@ int parse_rgb(char *str, int *r, int *g, int *b)
         if (str[index] == '-' || /*str[index] == '0' ||*/ !is_digit(str[index])) 
         {
             printf("Error : Bad value for %c (RGB)\n", "RGB"[i]);
+            free_parsing2(parsing);
             return 1;
         }
 
@@ -51,6 +93,7 @@ int parse_rgb(char *str, int *r, int *g, int *b)
             if (str[index] != ',') 
             {
                 printf("Error : Incorrect separator character after %c.\n", "RGB"[i]);
+                free_parsing2(parsing);
                 return 1;
             }
             index++;
@@ -67,6 +110,7 @@ int parse_rgb(char *str, int *r, int *g, int *b)
     else 
     {
             printf("Error : Non-numeric character found\n");
+            free_parsing(parsing);
             return 1;
     }
     return 0;
@@ -84,7 +128,7 @@ int parsing_rgbs_sky(char **text_file, t_parsing *parsing)
             int r;
             int g;
             int b;
-            if (parse_rgb(text_file[line_index], &r, &g, &b) == 0) 
+            if (parse_rgb(text_file[line_index], &r, &g, &b, parsing) == 0) 
             {
                   
                 if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255)
@@ -109,9 +153,9 @@ int parsing_rgbs_sky(char **text_file, t_parsing *parsing)
   
    // Si aucune valeur RGB valide n'a été trouvée
     printf("Error : sky values are incorrect\n");
+    free_parsing(parsing);
     return 1;
 }
-
 
 int parsing_rgbs_floor(char **text_file, t_parsing *parsing)
 {
@@ -125,7 +169,7 @@ int parsing_rgbs_floor(char **text_file, t_parsing *parsing)
             int r;
             int g;
             int b;
-            if (parse_rgb(text_file[line_index], &r, &g, &b) == 0) 
+            if (parse_rgb(text_file[line_index], &r, &g, &b, parsing) == 0) 
             {
 
                 if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255)
@@ -147,6 +191,8 @@ int parsing_rgbs_floor(char **text_file, t_parsing *parsing)
     }
    // Si aucune valeur RGB valide n'a été trouvée
     printf("Error : floor values are incorrect\n");
+    free_parsing(parsing);
+    exit (1);
     return 1;
 }
 
@@ -177,8 +223,7 @@ int nbr_texture_value(const char *prefix, t_parsing *parsing)
     int i = 0;
     int count = 0;
     size_t prefix_length = strlen(prefix);
-
-    while (parsing->config_elements[i] != NULL) 
+    while (parsing->config_elements[i] != NULL)
     {
         if (strncmp(parsing->config_elements[i], prefix, prefix_length) == 0) 
         {
@@ -186,6 +231,7 @@ int nbr_texture_value(const char *prefix, t_parsing *parsing)
             if (count > 1) 
             {
                 printf("Error: Structure '%s' appears more than once\n", prefix);
+                free_parsing(parsing);
                 return 1; // Structure trouvée plus d'une fois
             }
         }
@@ -214,7 +260,7 @@ int parsing_rgbs(char **text_file, t_parsing *parsing)
 return 0;
 }
 
-int parse_resolution(char *str, int *width, int *height) 
+int parse_resolution(char *str, int *width, int *height, t_parsing *parsing) 
 {
     int index = 2; // Ignorer les deux premiers caractères "R "
     int values[2] = {0, 0}; // Stocke la largeur et la hauteur
@@ -238,11 +284,13 @@ int parse_resolution(char *str, int *width, int *height)
         else 
         {
             printf("Error : Non-numeric character found\n");
+            free_parsing(parsing);
             return 1;
         }
         if (i > 2) 
         {
             printf("Error: Multiple resolutions in the file\n");
+            free_parsing2(parsing);
             return 1; // Résolution invalide
         }
         if (str[index] == ' ' || str[index] == '\0') 
@@ -255,6 +303,7 @@ int parse_resolution(char *str, int *width, int *height)
         else 
         {
             printf("Error : Non-numeric character found\n");
+            free_parsing(parsing);
             return 1;
         }
     }
@@ -275,7 +324,7 @@ int parsing_resolution(char **text_file, t_parsing *parsing)
         {
             int r_x;
             int r_y;
-            if (parse_resolution(text_file[line_index], &r_x, &r_y) == 0) 
+            if (parse_resolution(text_file[line_index], &r_x, &r_y, parsing) == 0) 
             {
                // printf("r_x1 = %d\n",  r_x);
                // printf("r_x2 = %d\n", r_y);
@@ -295,6 +344,7 @@ int parsing_resolution(char **text_file, t_parsing *parsing)
     }
     // Si aucune résolution valide n'a été trouvée
     printf("Error : Incorrect or undefined resolution\n");
+    free_parsing2(parsing);
     return 1;
 }
 
@@ -326,12 +376,31 @@ int extension_compare(const char *text_file, const char *extension)
     return 1;
 }
 
-int check_texture_value(char **text_file, char *name_texture) 
+void free_texture(t_parsing *parsing)
+{
+    if (!parsing->so_texture_value)
+        free(parsing->no_texture_value);//printf("y'a rien\n");
+    else if (!parsing->we_texture_value)
+    {
+        free(parsing->no_texture_value);
+        free(parsing->so_texture_value);
+    }
+    else if (!parsing->ea_texture_value)
+    {
+        printf("coucou");
+        free(parsing->no_texture_value);
+        free(parsing->so_texture_value);
+        free(parsing->we_texture_value);
+    }
+}
+
+int check_texture_value(char **text_file, char *name_texture, t_parsing *parsing) 
 {
     // Vérifie si le nom du fichier se termine par l'extension ".xpm"
     if (extension_compare(*text_file, ".xpm") == 1) 
     {
         printf("Error: The file must have only the .xpm extension\n");
+        free_parsing(parsing);
         exit(1);
     }
 
@@ -371,7 +440,7 @@ int check_s_texture_value(char **text_file, t_parsing *parsing)
              if (strncmp(&text_file[line_index][i], "S ", 2) == 0)
             {
                 char *s = "S ";
-                if (check_texture_value(&text_file[line_index], s) == 0) 
+                if (check_texture_value(&text_file[line_index], s, parsing) == 0) 
                 {
                     i = i + 2;
                     
@@ -395,6 +464,7 @@ int check_s_texture_value(char **text_file, t_parsing *parsing)
     }
     // Si aucune résolution valide n'a été trouvée
     printf("Error : S texture value is invalid\n");
+    free_parsing(parsing);
     return 1;
 }
 
@@ -417,7 +487,7 @@ int check_ea_texture_value(char **text_file, t_parsing *parsing)
             if (strncmp(&text_file[line_index][i], "EA", 2) == 0) 
             {
                 char *ea = "EA ";
-                if (check_texture_value(&text_file[line_index], ea) == 0) 
+                if (check_texture_value(&text_file[line_index], ea, parsing) == 0) 
                 {
                     i = i + 2;
                     
@@ -442,6 +512,7 @@ int check_ea_texture_value(char **text_file, t_parsing *parsing)
     }
     // Si aucune résolution valide n'a été trouvée
     printf("Error : EA texture value is invalid\n");
+    free_parsing(parsing);
     return 1;
 }
 
@@ -463,7 +534,7 @@ int check_we_texture_value(char **text_file, t_parsing *parsing)
             if (strncmp(&text_file[line_index][i], "WE", 2) == 0) 
             {
                 char *we = "WE ";
-                if (check_texture_value(&text_file[line_index], we) == 0) 
+                if (check_texture_value(&text_file[line_index], we, parsing) == 0) 
                 {
                     i = i + 2;
                     
@@ -488,6 +559,7 @@ int check_we_texture_value(char **text_file, t_parsing *parsing)
     }
     // Si aucune résolution valide n'a été trouvée
     printf("Error : WE texture value is invalid\n");
+    free_parsing(parsing);
     return 1;
 }
 
@@ -510,7 +582,7 @@ int check_so_texture_value(char **text_file, t_parsing *parsing)
             if (strncmp(&text_file[line_index][i], "SO", 2) == 0) 
             {
                 char *so = "SO ";
-                if (check_texture_value(&text_file[line_index], so) == 0) 
+                if (check_texture_value(&text_file[line_index], so, parsing) == 0) 
                 {
                     i = i + 2;
                     
@@ -523,6 +595,7 @@ int check_so_texture_value(char **text_file, t_parsing *parsing)
                     // i pointe maintenant au début du chemin de la texture
                     parsing->so_texture_value = strdup(&text_file[line_index][i]);
                     // Ajoutez le reste de votre logique ici (par exemple, vérification du chemin de texture)
+                        //test
                     return 0;
                 }
             } 
@@ -534,7 +607,9 @@ int check_so_texture_value(char **text_file, t_parsing *parsing)
         line_index++;  // Incrément de l'index
     }
     // Si aucune résolution valide n'a été trouvée
+    
     printf("Error : SO texture value is invalid\n");
+    free_parsing(parsing);
     return 1;
 }
 
@@ -557,7 +632,7 @@ int check_no_texture_value(char **text_file, t_parsing *parsing)
             if (strncmp(&text_file[line_index][i], "NO", 2) == 0) 
             {
                 char *no = "NO ";
-                if (check_texture_value(&text_file[line_index], no) == 0) 
+                if (check_texture_value(&text_file[line_index], no, parsing) == 0) 
                 {
                     i = i + 2; // Sauter "NO"
                     
@@ -580,19 +655,20 @@ int check_no_texture_value(char **text_file, t_parsing *parsing)
             }
         }
         line_index++;  // Incrément de l'index
+ 
     }
     // Si aucune résolution valide n'a été trouvée
     printf("Error : NO texture value is invalid\n");
+    free_parsing(parsing);
     return 1;
 }
-
 
 int parsing_textures(char **text_file, t_parsing *parsing)
 {
     if (check_no_texture_value(text_file, parsing) == 1)
 		return (1);
     if (check_so_texture_value(text_file, parsing) == 1)
-		return (1);
+            return (1);
 	if (check_we_texture_value(text_file, parsing) == 1)
 		return (1);
     if (check_ea_texture_value(text_file, parsing) == 1)

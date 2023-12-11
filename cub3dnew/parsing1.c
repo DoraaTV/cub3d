@@ -22,6 +22,8 @@ void	init_struct(t_parsing	*parsing)
 
     //init map
     parsing->map = NULL;
+    parsing->config_count = 0;
+    parsing->map_count = 0;
     parsing->config_elements = NULL;
 	parsing->copied_map = NULL;
 	parsing->map_height = 0;
@@ -72,6 +74,7 @@ int parsing(char *file_cub3d_name, t_data *data)
         if (parsing_cub3d(parsing->config_elements, &data->parsing) == 1)
         {
             //faire mes frees si parsing errone
+           
             return 1;
         }
          // Ferme le descripteur de fichier si terminé (a revoir si ok)

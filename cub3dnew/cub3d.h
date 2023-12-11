@@ -28,7 +28,10 @@ typedef struct s_parsing
 {
 	/*variables pour substitut GNL*/
 	int num_lines;
+	int ligne_vide;
     int *num_lines_ptr;
+	int config_count;
+	int map_count;
 	char buffer[MAX_LINE_LENGTH];
 	ssize_t bytes_read;
 	char current_char;
@@ -144,7 +147,8 @@ int check_map_prefixes();
 int parsing_cub3d(char **text_file, t_parsing *parsing);
 int put_text_struct();
 int put_map_in_struct(t_parsing *parsing);
-int check_nbr_directions(t_parsing *parsing); 
+int check_nbr_directions(t_parsing *parsing);
+int free_parsing(t_parsing *parsing);
 
 /*EXECUTION*/
 void ft_raycasting(t_data *s);

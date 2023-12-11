@@ -7,7 +7,7 @@ int correct_number(t_parsing *parsing)
 
     int num_lines = 0;
     int start = parsing->start_map;
-    while (parsing->map[start] != NULL) 
+    while (start < parsing->num_lines) 
     {
         char *line = parsing->map[start];
         size_t i = 0;
@@ -90,7 +90,7 @@ int check_all_wall_closed(t_parsing *parsing, int start_map)
     int j;
     char **map = parsing->map;
 
-    while (map[i] != NULL)
+    while (i < parsing->num_lines)
     {
         //printf("ici = %s\n", map[i]);
         j = 0;
@@ -121,7 +121,7 @@ int check_last_wall(t_parsing *parsing)
 {
     int index_end = parsing->start_map; // Pointe vers la première ligne de la carte
 
-    while (parsing->map[index_end] != NULL)
+    while (index_end < parsing->num_lines)
     {
         index_end++; // Avance jusqu'à la fin de la carte
     }
@@ -182,7 +182,7 @@ int map_less_3_lines(t_parsing *parsing)
 
     int num_lines = 0;
     int start = parsing->start_map;
-    while (parsing->map[start] != NULL) 
+    while (start < parsing->num_lines) 
     {
         num_lines++;
         start++; // Avance au prochain élément de parsing->map
@@ -204,7 +204,7 @@ int check_nbr_player(t_parsing *parsing)
     int player_count = 0;
 
     int start = parsing->start_map;
-    while (parsing->map[start] != NULL) 
+    while (start < parsing->num_lines) 
     {
         char *line = parsing->map[start];
         char *player_chars = "NSEW";
@@ -245,7 +245,7 @@ int check_nbr_directions(t_parsing *parsing)
     int destination_count = 0;
 
     int start = parsing->start_map;
-    while (parsing->map[start] != NULL) 
+    while (start < parsing->num_lines) 
     {
         char *line = parsing->map[start];
         char *destination_chars = "SWE";

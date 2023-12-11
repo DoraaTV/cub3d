@@ -16,12 +16,27 @@ void ft_free(t_data *s)
             mlx_destroy_image(s->mlx, s->texture[i].img);
         i++;
     }
+    free(s->parsing.so_texture_value);
+    free(s->parsing.we_texture_value);
+    free(s->parsing.no_texture_value);
+    free(s->parsing.ea_texture_value);
+    free(s->parsing.s_texture_value);
+    free(s->texture);
+    mlx_destroy_image(s->mlx, s->img.img);
+    mlx_destroy_window(s->mlx, s->win);
     mlx_destroy_display(s->mlx);
-    i = s->parsing.start_map;
-    while (s->parsing.map[i])
+    printf(" fs %s\n", s->parsing.map[s->parsing.start_map - 1]);
+    i = s->parsing.config_count;
+    while (i < s->parsing.start_map)
     {
-        printf("%s %d\n", s->parsing.map[i], i);
         free(s->parsing.map[i]);
+        i++;
+    }
+    i = 0;
+    while (i < s->parsing.map_count - s->parsing.ligne_vide)
+    {
+        if(s->parsing.map[i + s->parsing.start_map])
+            free(s->parsing.map[i + s->parsing.start_map]);
         i++;
     }
     free(s->parsing.map);
@@ -128,6 +143,10 @@ static void init_ray(t_data *s, t_ray *ray, float angle)
     ray->step_x = ft_sign(ray->dir_x);
     ray->step_y = ft_sign(ray->dir_y);
     ray->vert_x = (int)s->player_x;
+    ray->horz_w = 0;
+    ray->horz_x = 0;
+    ray->vert_w = 0;
+    ray->vert_y = 0;
     if (ray->step_x > 0)
         ray->vert_x += 1.0f;
     ray->horz_y = (int)s->player_y;
