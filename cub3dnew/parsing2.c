@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing2.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/12 13:57:16 by thrio             #+#    #+#             */
+/*   Updated: 2023/12/12 13:57:17 by thrio            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 //parsing de la map
@@ -47,6 +59,7 @@ int parsing_cub3d(char **text_file, t_parsing *parsing)
     // Analyse les informations de configuration (résolution, textures, couleurs, etc.)
     if (check_config_elements(parsing->config_elements, parsing) == 1)
         return (1);
+               
     parsing->map[parsing->map_count + parsing->start_map - 1] = NULL;
 
     //mettre la map dans une autre structure pour la traiter et que les deux

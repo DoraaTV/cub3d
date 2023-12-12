@@ -6,7 +6,7 @@
 /*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 11:44:48 by madjogou          #+#    #+#             */
-/*   Updated: 2023/12/11 16:11:37 by thrio            ###   ########.fr       */
+/*   Updated: 2023/12/12 15:25:58 by thrio            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0 ;
+	if (!s)
+		return (0);
 	while (s[i])
 		i++;
 	return (i);

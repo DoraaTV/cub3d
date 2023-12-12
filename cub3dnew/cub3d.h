@@ -61,6 +61,7 @@ typedef struct s_parsing
 
 	/*map*/
 	char **map;
+	int sign_count;
 	int map_height;
 	int start_map;
 	char **copied_map;
@@ -146,9 +147,12 @@ int parsing_textures();
 int check_map_prefixes();
 int parsing_cub3d(char **text_file, t_parsing *parsing);
 int put_text_struct();
+int free_parsing2(t_parsing *parsing);
 int put_map_in_struct(t_parsing *parsing);
 int check_nbr_directions(t_parsing *parsing);
 int free_parsing(t_parsing *parsing);
+char	*ft_check_file(char *dst, t_data *s, int i);
+int	ft_strncmp(const char *s1, const char *s2, size_t n);
 
 /*EXECUTION*/
 void ft_raycasting(t_data *s);
@@ -161,6 +165,15 @@ int ft_move_forward(t_data *s, int speed);
 int ft_move_left(t_data *s, int speed);
 int ft_rotateminus(t_data *s);
 int ft_rotate(t_data *s);
+void	ft_free(t_data *s);
+int	ft_init_textures(t_data *s);
+float	ft_ray(t_data *s, float angle);
+int	ft_close(t_data *s);
+float	ft_sign(float n);
+int	ft_keys(int key, t_data *s);
+void draw_game(t_data *s);
+void	draw_line(t_data *s, int w, float dist);
+void	draw_floor_ceiling(t_data *s);
 
 /*GNL*/
 # ifndef BUFFER_SIZE

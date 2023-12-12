@@ -1,93 +1,67 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   moves.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/12 10:28:32 by thrio             #+#    #+#             */
+/*   Updated: 2023/12/12 10:31:01 by thrio            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-int		ft_key_press(int key, t_data *cub3d)
+void	ft_move(t_data *s, int direction)
 {
-	if (key == 119 || key == 65362)
-		cub3d->move[0] = 1;
-	else if (key == 115 || key == 65364)
-		cub3d->move[1] = 1;
-	else if (key == 97)
-		cub3d->move[2] = 1;
-	else if (key == 100)
-		cub3d->move[3] = 1;
+	float	dist;
+	float	dist_x;
+	float	dist_y;
+	float	angle;
+
+	angle = s->player_direction + direction * M_PI / 2;
+	dist_x = 0.1f * cos(angle);
+	dist_y = 0.1f * sin(angle);
+	dist = ft_ray(s, ft_sign(dist_y) * M_PI / 2);
+	if (dist * dist < dist_y * dist_y)
+		dist_y = 0.0f;
+	dist = ft_ray(s, (1 - (ft_sign(dist_x) + 1) / 2) * M_PI);
+	if (dist * dist < dist_x * dist_x)
+		dist_x = 0.0f;
+	dist = ft_ray(s, angle);
+	if (dist * dist < dist_x * dist_x + dist_y * dist_y)
+	{
+		if (ft_sign(dist_y) * ft_sign(dist_x) != 0)
+			dist_y = 0.0f;
+	}
+	s->player_x += dist_x;
+	s->player_y += dist_y;
+}
+
+int	ft_keys(int key, t_data *s)
+{
+	if (s->win == NULL)
+		return (0);
+	if (key == XK_Escape || key == XK_q || key == XK_Q)
+	{
+		ft_close(s);
+		exit (0);
+	}
+	if (key == 65362 || key == 119)
+		ft_move(s, 0);
+	else if (key == 65364 || key == 115)
+		ft_move(s, 2);
 	else if (key == 65361)
-		cub3d->move[4] = 1;
+		s->player_direction -= 0.02f * M_PI;
 	else if (key == 65363)
-		cub3d->move[5] = 1;
-	return (1);
-}
-
-int ft_exit_loop(t_data *cub3d)
-{
-    mlx_destroy_window(cub3d->mlx, cub3d->win);
-    exit(0);
-}
-
-int		ft_key_release(int key, t_data *cub3d)
-{
-	if (key == 119 || key == 65362)
-		cub3d->move[0] = 0;
-	else if (key == 115 || key == 65364)
-		cub3d->move[1] = 0;
-	else if (key == 97)
-		cub3d->move[2] = 0;
+		s->player_direction += 0.02f * M_PI;
 	else if (key == 100)
-		cub3d->move[3] = 0;
-	else if (key == 65361)
-		cub3d->move[4] = 0;
-	else if (key == 65363)
-		cub3d->move[5] = 0;
-	else if (key == 65307)
-		ft_exit_loop(cub3d);
+		ft_move(s, 1);
+	else if (key == 97)
+		ft_move(s, 3);
+	else
+		return (0);
+	mlx_destroy_image(s->mlx, s->img.img);
+	draw_game(s);
 	return (1);
-}
-
-int ft_move_forward(t_data *s, int speed)
-{
-    float new_x;
-    float new_y;
-
-    new_x = s->player_x + speed * sinf(s->alphacam);
-    new_y = s->player_y + speed * cosf(s->alphacam);
-    if (s->parsing.map[(int)new_x][(int)new_y] == '0')
-    {
-        s->player_x = new_x;
-        s->player_y = new_y;
-        return (1);
-    }
-    return (0);
-}
-
-int ft_move_left(t_data *s, int speed)
-{
-    float new_x;
-    float new_y;
-
-    new_x = s->player_x + speed * cosf(s->alphacam);
-    new_y = s->player_y + speed * sinf(s->alphacam);
-    if (s->parsing.map[(int)new_x][(int)new_y] == '0')
-    {
-        s->player_x = new_x;
-        s->player_y = new_y;
-        return (1);
-    }
-    return (0);
-}
-
-int ft_rotateminus(t_data *s)
-{
-    s->alphacam = s->alphacam + 0.035f;
-    // printf("s->alphacam = %f\n", s->alphacam);
-    if (s->alphacam > 6.2831853072f)
-        s->alphacam -= 6.2831853072f;
-    return (1);
-}
-
-int ft_rotate(t_data *s)
-{
-    s->alphacam = s->alphacam - 0.035f;
-    // printf("s->alphacam = %f\n", s->alphacam);
-    if (s->alphacam < 0.f)
-        s->alphacam += 6.2831853072f;
-    return (1);
 }

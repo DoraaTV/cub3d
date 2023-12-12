@@ -1,5 +1,5 @@
 NO ./xpm/wall_3.xpm
-SO ./xpm/crate2_4.xpm
+SO ./xpm/crate2_4.xpm ./xpm/crate2_4.xpm
 WE ./xpm/crate3_1.xpm
 EA ./xpm/crate3_2.xpm
 S ./textures/creeper.xpm

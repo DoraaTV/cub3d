@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing1.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/12 13:57:13 by thrio             #+#    #+#             */
+/*   Updated: 2023/12/12 15:41:30 by thrio            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	init_struct(t_parsing	*parsing)
@@ -22,8 +34,11 @@ void	init_struct(t_parsing	*parsing)
 
     //init map
     parsing->map = NULL;
+    parsing->sign_count = 0;
     parsing->config_count = 0;
     parsing->map_count = 0;
+    parsing->start_map = 0;
+    parsing->ligne_vide = 0;
     parsing->config_elements = NULL;
 	parsing->copied_map = NULL;
 	parsing->map_height = 0;

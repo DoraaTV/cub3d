@@ -1,53 +1,56 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_map_elements.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/12 11:53:02 by thrio             #+#    #+#             */
+/*   Updated: 2023/12/12 15:01:03 by thrio            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-//pour voir si la map a des caracteres correctes
 int correct_number(t_parsing *parsing) 
 {
     char *player_chars = "NSEW";
-
     int num_lines = 0;
     int start = parsing->start_map;
+    char *line;
+
     while (start < parsing->num_lines) 
     {
-        char *line = parsing->map[start];
+        line = parsing->map[start];
+        
         size_t i = 0;
-
         while (line[i] == ' ')
                      i++;
         while (line[i] != '\0')
         {
             char current_char = line[i];
-            //printf("ici = %c\n", current_char);
-            // Vérifiez les caractères spéciaux
             if (current_char == '\n' || current_char == '\t' || current_char == '\r' ||
                 current_char == '\v' || current_char == '\f')
             {
-                // Caractère spécial trouvé, passez à la ligne suivante
                 i++;
                 continue;
             }
-            // Vérifiez les espaces -> dernier lignes 
-            // + changer car space possible au debut
-            if (current_char == ' ') //&& current_char + 1 == '\n')
-            {
-                line[i] = '1';//current_char = 1;
-                //  printf("Error: Do not put spaces in the map\n");
-                // return 1;
-            }
-
+            if (current_char == ' ')
+                line[i] = '1';
             if (strchr(player_chars, current_char) == NULL)
             {
                 if (current_char >= 'A' && current_char <= 'Z')
                 {
                     printf("Error : %c this direction does not exist\n", current_char);
-                    return 1;
+                    free_parsing(parsing);
+                    return (1);
                 }
             }
-
             if ((current_char < '0' || current_char > '2') && strchr(player_chars, current_char) == NULL && current_char != ' ')
             {
                 printf("Error: %c is not a correct number\n", current_char);
-                return 1;
+                free_parsing(parsing);
+                return (1);
             }
 
             i++;
@@ -105,6 +108,7 @@ int check_all_wall_closed(t_parsing *parsing, int start_map)
                 if (check_wall(map, i, j) == 1)
                 {
                     printf("Error: The walls are not closed\n");
+                    free_parsing(parsing);
                     return 1;
                 }
             }           
@@ -138,6 +142,7 @@ int check_last_wall(t_parsing *parsing)
         {
             
             printf("Error: Last wall is not closed\n");
+            free_parsing(parsing);
             return 1;
         }
         j++;
@@ -157,6 +162,7 @@ int check_first_wall(t_parsing *parsing)
         if (map_line[j] != '1' && map_line[j] != ' ')
         {
             printf("Error: First wall is not closed\n");
+            free_parsing(parsing);
             return 1;
         }
         j++;
@@ -193,6 +199,7 @@ int map_less_3_lines(t_parsing *parsing)
     if (num_lines <= 3) 
     {
         printf("Error: The map has less than 3 lines.\n");
+        free_parsing(parsing);
         return 1;
     }
     return 0;
@@ -219,7 +226,8 @@ int check_nbr_player(t_parsing *parsing)
                 if (player_count > 1) 
                 {
                     printf("Error: There is more than one player on the map\n");
-                    return 1;
+                    free_parsing(parsing);
+                    return (1);
                 }
                 i++;
             }
@@ -234,6 +242,7 @@ int check_nbr_player(t_parsing *parsing)
     if (player_count == 0)
     {
         printf("Error: There is no player on the map\n");
+        free_parsing(parsing);
         return 1;
     }
     return 0;
@@ -259,6 +268,7 @@ int check_nbr_directions(t_parsing *parsing)
                 if (destination_count > 1) 
                 {
                     printf("Error: There is more than one direction on the map\n");
+                    free_parsing(parsing);
                     return 1;
                 }
                 i++;
