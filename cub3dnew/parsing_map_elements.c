@@ -6,7 +6,7 @@
 /*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 11:53:02 by thrio             #+#    #+#             */
-/*   Updated: 2023/12/12 15:01:03 by thrio            ###   ########.fr       */
+/*   Updated: 2023/12/12 21:04:41 by thrio            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,25 +63,25 @@ int correct_number(t_parsing *parsing)
 
 int		check_spaces(char c)
 {
-	if (c > 9 && c < 13)
+	if ((c > 9 && c < 13) || c == 32)
 		return (1);
 	return (0);
 }
 
 int check_wall(char **strs, int i, int j)
 {
+    if (j > (int)ft_strlen(strs[i - 1]) && ft_strlen(strs[i - 1]) < ft_strlen(strs[i]))
+        return (1);
+    if (j > (int)ft_strlen(strs[i + 1]) && ft_strlen(strs[i + 1]) < ft_strlen(strs[i]))
+        return (1);
     if (strs[i][j - 1] == 0 || check_spaces(strs[i][j - 1]))
         return (1);
-
     if (strs[i][j + 1] == 0 || check_spaces(strs[i][j + 1]))
         return (1);
-
     if (strs[i - 1][j] == 0 || check_spaces(strs[i - 1][j]))
         return (1);
-
     if (strs[i + 1][j] == 0 || check_spaces(strs[i + 1][j]))
         return (1);
-
     return 0; // Tous les côtés sont fermés
 }
 
@@ -90,6 +90,7 @@ int check_all_wall_closed(t_parsing *parsing, int start_map)
 {
     int i = start_map + 1; //car premiere ligne deja traitee
     //mais attention car ne verifie pas le dernier mur
+
     int j;
     char **map = parsing->map;
 
@@ -97,6 +98,7 @@ int check_all_wall_closed(t_parsing *parsing, int start_map)
     {
         //printf("ici = %s\n", map[i]);
         j = 0;
+        // printf("map : %s\n", map[i]);
         while (map[i][j] != '\0') 
         {
             //printf("ici = %c\n", map[i][j]);
@@ -104,7 +106,7 @@ int check_all_wall_closed(t_parsing *parsing, int start_map)
             map[i][j] == 'N' || map[i][j] == 'S' ||
             map[i][j] == 'E' || map[i][j] == 'W')
             {
-                //printf("je suis different = %c\n", map[i][j]);
+                //printf("je suis different = %d %d\n", start_map, parsing->ligne_vide);
                 if (check_wall(map, i, j) == 1)
                 {
                     printf("Error: The walls are not closed\n");
@@ -153,12 +155,12 @@ int check_last_wall(t_parsing *parsing)
 int check_first_wall(t_parsing *parsing)
 { 
     int i = parsing->start_map;
+
     char *map_line = parsing->map[i];
 
     int j = 0;
     while (map_line[j] != '\0')
     {
-        
         if (map_line[j] != '1' && map_line[j] != ' ')
         {
             printf("Error: First wall is not closed\n");

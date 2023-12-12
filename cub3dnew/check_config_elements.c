@@ -6,7 +6,7 @@
 /*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 13:56:52 by thrio             #+#    #+#             */
-/*   Updated: 2023/12/12 16:00:36 by thrio            ###   ########.fr       */
+/*   Updated: 2023/12/12 17:59:44 by thrio            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ int nbr_texture_value(const char *prefix, t_parsing *parsing)
 	int i = 0;
 	int count = 0;
 	size_t prefix_length = strlen(prefix);
-	while (parsing->config_elements[i] != NULL)
+	while (i < parsing->config_count)
 	{
 		if (strncmp(parsing->config_elements[i], prefix, prefix_length) == 0) 
 		{
@@ -568,7 +568,7 @@ int	check_no_texture_value(char **text_file, t_parsing *parsing)
 			i++;
 		while (text_file[line_index][i] != '\0') 
 		{
-			if (strncmp(&text_file[line_index][i], "NO ", 3) == 0) 
+			if (strncmp(text_file[line_index], "NO ", 3) == 0) 
 			{
 				char *no = "NO ";
 				if (check_texture_value(&text_file[line_index], no, parsing) == 0) 
@@ -580,6 +580,8 @@ int	check_no_texture_value(char **text_file, t_parsing *parsing)
 						j++;
 					}
 					parsing->no_texture_value = strdup(&text_file[line_index][i]);
+					// else
+					// 	free_parsing2(parsing);
 					return (0);
 				}
 			} 

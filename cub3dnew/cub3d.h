@@ -18,7 +18,7 @@
 # define M_PI 3.14159265358979323846
 # define WINDOW_WIDTH 1280
 
-# define MAX_LINE_LENGTH 204//1024 // longueur maximale d'une ligne (a ajuster mais les lignes sont courtes donc ca va)
+# define MAX_LINE_LENGTH 1024 // longueur maximale d'une ligne (a ajuster mais les lignes sont courtes donc ca va)
 # define MAX_MAP_SIZE_X 24 // Ajustez selon besoin
 # define MAX_MAP_SIZE_Y 24
 
@@ -33,9 +33,11 @@ typedef struct s_parsing
 	int config_count;
 	int map_count;
 	char buffer[MAX_LINE_LENGTH];
-	ssize_t bytes_read;
+	int counter;
+	int	counter2;
 	char current_char;
     int line_index;
+	int	config_size;
 
 	/*valeurs rgb du sol et plafond*/
 	int floor_value_1;
@@ -140,6 +142,7 @@ int check_nbr_player();
 int correct_number();
 
 void    init_textures(t_parsing *parsing);
+int     ft_get_size(char *file_cub3d_name, t_parsing *s);
 int parsing(char *file_cub3d_name, t_data *data);
 int parsing_rgbs();
 int parsing_resolution();

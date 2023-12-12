@@ -6,11 +6,60 @@
 /*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 13:57:13 by thrio             #+#    #+#             */
-/*   Updated: 2023/12/12 15:41:30 by thrio            ###   ########.fr       */
+/*   Updated: 2023/12/12 20:04:35 by thrio            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+int     ft_get_size(char *file_cub3d_name, t_parsing *s)
+{
+    int fd;
+    char *line;
+    int  check;
+    int  count;
+    int i;
+
+    check = 0;
+    count = 0;
+    fd = open(file_cub3d_name, O_RDONLY);
+    if (fd < 2)
+        return (1);
+    line = get_next_line(fd);
+    while (line && check == 0)
+    {
+        if (line[0] == '1' || line[0] == ' ')
+        {
+            if (line[0] == ' ')
+            {
+                i = 0;
+                while (line[i])
+                {
+                    if (line[i] == '1')
+                    {
+                        s->counter = count;
+                        check = 1;
+                    }
+                    i++;
+                }
+            }
+            s->counter = count;
+            check = 1;
+        }
+        s->config_size++;
+        count++;
+        free(line);
+        line = get_next_line(fd);
+    }
+    free(line);
+    line = get_next_line(fd);
+    while (line)
+    {
+        free(line);
+        line = get_next_line(fd);
+    }
+    return (0);
+}
 
 void	init_struct(t_parsing	*parsing)
 {
@@ -34,15 +83,16 @@ void	init_struct(t_parsing	*parsing)
 
     //init map
     parsing->map = NULL;
-    parsing->sign_count = 0;
     parsing->config_count = 0;
+    parsing->sign_count = 0;
+    parsing->config_size = 0;
     parsing->map_count = 0;
     parsing->start_map = 0;
     parsing->ligne_vide = 0;
     parsing->config_elements = NULL;
 	parsing->copied_map = NULL;
 	parsing->map_height = 0;
-
+    
     //ETC
 }
 
@@ -58,14 +108,18 @@ int parsing(char *file_cub3d_name, t_data *data)
 
     // g_allocs = malloc(sizeof(t_allocs *));
 	// *g_allocs = NaULL;
-
+    data->parsing.counter = 0;
     init_struct(&data->parsing);
-
+    if (ft_get_size(file_cub3d_name, &data->parsing) == 1)
+        return (1);
+    if (data->parsing.counter < 6)
+        return (1);
     //parsing pointe vers la même structure que data.parsing
     parsing = &data->parsing;
-        if (put_text_struct(file_cub3d_name, &data->parsing) == 1)
+    if (put_text_struct(file_cub3d_name, &data->parsing) == 1)
         {
             printf("Error : text cannot be put into structure\n");
+            free_parsing(&data->parsing);
             return 1;
         }
         // Vérifiez si parsing->text_file a été correctement initialisé

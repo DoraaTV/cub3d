@@ -6,7 +6,7 @@
 /*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 13:57:16 by thrio             #+#    #+#             */
-/*   Updated: 2023/12/12 13:57:17 by thrio            ###   ########.fr       */
+/*   Updated: 2023/12/12 19:02:11 by thrio            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ int parsing_cub3d(char **text_file, t_parsing *parsing)
     if (check_config_elements(parsing->config_elements, parsing) == 1)
         return (1);
                
-    parsing->map[parsing->map_count + parsing->start_map - 1] = NULL;
+    parsing->map[parsing->config_size] = NULL;
+    //attention parsing->map[parsing->map_count + parsing->start_map] = NULL;
 
     //mettre la map dans une autre structure pour la traiter et que les deux
     //ne se melange pas
