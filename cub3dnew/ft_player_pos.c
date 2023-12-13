@@ -6,45 +6,44 @@
 /*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 13:57:00 by thrio             #+#    #+#             */
-/*   Updated: 2023/12/12 15:01:03 by thrio            ###   ########.fr       */
+/*   Updated: 2023/12/13 12:53:44 by thrio            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void ft_compare(char c, t_data *s)
+void	ft_compare(char c, t_data *s)
 {
-    if (c == 'N')
-        s->player_direction = 1.5f * M_PI;
-    else if (c == 'S')
-        s->player_direction = 0.5f * M_PI;
-    else if (c == 'W')
-        s->player_direction = M_PI;
-    else if (c == 'E')
-        s->player_direction = 0.0f;
+	if (c == 'N')
+		s->player_direction = 1.5f * M_PI;
+	else if (c == 'S')
+		s->player_direction = 0.5f * M_PI;
+	else if (c == 'W')
+		s->player_direction = M_PI;
+	else if (c == 'E')
+		s->player_direction = 0.0f;
 }
 
-void ft_find_player(t_data *s)
+void	ft_find_player(t_data *s)
 {
-    int i;
-    int j;
+	int	i;
+	int	j;
 
-    i = 0;
-   
-    while (s->parsing.map[i + s->parsing.start_map])
-    {
-        j = 0;
-        while (s->parsing.map[i + s->parsing.start_map][j])
-        {
-            if (strchr("NSEW", s->parsing.map[i + s->parsing.start_map][j]))
-            {
-                s->player_x = (float)j + 0.2f;
-                s->player_y = (float)i + 0.2f;
-                ft_compare(s->parsing.map[i + s->parsing.start_map][j], s);
-                return ;
-            }
-            j++;
-        }
-        i++;
-    }
+	i = 0;
+	while (s->parsing.map[i + s->parsing.start_map])
+	{
+		j = 0;
+		while (s->parsing.map[i + s->parsing.start_map][j])
+		{
+			if (strchr("NSEW", s->parsing.map[i + s->parsing.start_map][j]))
+			{
+				s->player_x = (float)j + 0.2f;
+				s->player_y = (float)i + 0.2f;
+				ft_compare(s->parsing.map[i + s->parsing.start_map][j], s);
+				return ;
+			}
+			j++;
+		}
+		i++;
+	}
 }

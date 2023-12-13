@@ -24,63 +24,48 @@
 
 //# define MAPLETTERS "CNOSOWEEA"
 
+typedef struct s_rgb
+{
+	int r;
+	int	g;
+	int	b;
+}		t_rgb;
+
 typedef struct s_parsing
 {
-	/*variables pour substitut GNL*/
+	t_rgb	rgb;
 	int num_lines;
 	int ligne_vide;
-    int *num_lines_ptr;
+	int *num_lines_ptr;
 	int config_count;
 	int map_count;
 	char buffer[MAX_LINE_LENGTH];
 	int counter;
 	int	counter2;
 	char current_char;
-    int line_index;
+	int line_index;
 	int	config_size;
-
-	/*valeurs rgb du sol et plafond*/
 	int floor_value_1;
 	int floor_value_2;
 	int floor_value_3;
 	int floor_color;
-
 	int sky_value_1;
 	int sky_value_2;
 	int sky_value_3;
 	int ceiling_color;
-
-	/*valeurs pour la resolution*/
 	int r_value_x;
 	int r_value_y;
-
-	/*valeurs pour les textures*/
 	char *no_texture_value;
-    char *so_texture_value;
-    char *we_texture_value;
-    char *ea_texture_value;
-    char *s_texture_value;
-
-	/*map*/
+	char *so_texture_value;
+	char *we_texture_value;
+	char *ea_texture_value;
+	char *s_texture_value;
 	char **map;
 	int sign_count;
 	int map_height;
 	int start_map;
 	char **copied_map;
-
-	/*elements de configuration*/
 	char **config_elements;
-
-	/*position x et y du player*/
-
-	/*distances horizontale et verticale*/
-	//float;
-
-	/*direction dans laquelle il regarde en radiant*/
-	//float;
-
-	/*mlx*/
-
 }			t_parsing;
 
 typedef struct	s_image
@@ -134,13 +119,14 @@ typedef struct s_data
 
 int check_no_wall();
 int map_closed();
-
-int check_all_wall_closed();
-
+int	check_all_wall_closed(t_parsing *parsing, int i);
 int map_less_3_lines();
+void	too_much_player(t_parsing *parsing, int *player_count, int start);
+int correct_number2(t_parsing *parsing, char current_char, char *player_chars);
 int check_nbr_player();
-int correct_number();
-
+int	check_last_wall(t_parsing *parsing);
+int	correct_number(t_parsing *parsing, size_t i);
+void	correct_number3(t_parsing *parsing, char current_char, int i, char *player_chars);
 void    init_textures(t_parsing *parsing);
 int     ft_get_size(char *file_cub3d_name, t_parsing *s);
 int parsing(char *file_cub3d_name, t_data *data);
@@ -154,8 +140,15 @@ int free_parsing2(t_parsing *parsing);
 int put_map_in_struct(t_parsing *parsing);
 int check_nbr_directions(t_parsing *parsing);
 int free_parsing(t_parsing *parsing);
+int free_parsing2(t_parsing *parsing);
 char	*ft_check_file(char *dst, t_data *s, int i);
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
+int	rgb_to_hex_floor(t_parsing *parsing);
+int	rgb_to_hex_sky(t_parsing *parsing);
+int parsing_rgbs_sky(char **text_file, t_parsing *parsing);
+int	parse_rgb(char *str, int *r, int *g, int *b, t_parsing *parsing);
+int parsing_rgbs_floor(char **text_file, t_parsing *parsing);
+int is_digit(char c) ;
 
 /*EXECUTION*/
 void ft_raycasting(t_data *s);
@@ -177,6 +170,7 @@ int	ft_keys(int key, t_data *s);
 void draw_game(t_data *s);
 void	draw_line(t_data *s, int w, float dist);
 void	draw_floor_ceiling(t_data *s);
+void free_texture(t_parsing *parsing);
 
 /*GNL*/
 # ifndef BUFFER_SIZE
