@@ -1,38 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils2.c                                           :+:      :+:    :+:   */
+/*   put_text_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/12 10:27:25 by thrio             #+#    #+#             */
-/*   Updated: 2023/12/13 14:31:31 by thrio            ###   ########.fr       */
+/*   Created: 2023/12/13 16:07:45 by thrio             #+#    #+#             */
+/*   Updated: 2023/12/13 16:32:54 by thrio            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-char	*ft_check_file(char *dst, t_data *s, int i)
+void	ft_free_process(t_parsing *parsing, int fd)
 {
-	if (i == 0)
-		dst = s->parsing.no_txt;
-	else if (i == 1)
-		dst = s->parsing.so_txt;
-	else if (i == 2)
-		dst = s->parsing.we_txt;
-	else if (i == 3)
-	{
-		dst = s->parsing.ea_txt;
-	}
-	return (dst);
+	printf("Error: malloc failed.\n");
+	free_gnl(fd, parsing->line);
+	free_parsing(parsing);
 }
 
-float	ft_sign(float n)
+char	*ft_strdup(const char *s)
 {
-	if (n > 0)
-		return (1.0f);
-	else if (n < 0)
-		return (-1.0f);
-	else
-		return (0.0f);
+	char	*sortie;
+	int		size;
+	int		i;
+
+	i = 0;
+	size = ft_strlen(s);
+	sortie = (char *)malloc(sizeof(char) * (size + 1));
+	if (!sortie)
+		return (NULL);
+	while (s[i])
+	{
+		sortie[i] = s[i];
+		i++;
+	}
+	sortie[i] = '\0';
+	return (sortie);
 }

@@ -6,7 +6,7 @@
 /*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 11:44:48 by madjogou          #+#    #+#             */
-/*   Updated: 2023/12/12 15:25:58 by thrio            ###   ########.fr       */
+/*   Updated: 2023/12/13 16:18:52 by thrio            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,32 +38,6 @@ int	ft_search_newline(char *varstatic)
 		i++;
 	}
 	return (0);
-}
-
-char	*ft_strdup(const char *s1)
-{
-	size_t		i;
-	char		*dest;
-	char		*s;
-
-	s = (char *)s1;
-	i = 0;
-	while (s[i])
-		i++;
-	dest = malloc(sizeof(char) * i + 1);
-	i = 0;
-	if (dest == NULL)
-		return (0);
-	else
-	{
-		while (s[i])
-		{
-			dest[i] = s[i];
-			i++;
-		}
-		dest[i] = '\0';
-		return (dest);
-	}
 }
 
 char	*ft_strjoin(char *s1, char *s2)

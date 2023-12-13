@@ -6,11 +6,28 @@
 /*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 10:30:48 by thrio             #+#    #+#             */
-/*   Updated: 2023/12/13 12:51:07 by thrio            ###   ########.fr       */
+/*   Updated: 2023/12/13 15:24:27 by thrio            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*res;
+	size_t	mult;
+
+	mult = nmemb * size;
+	if (nmemb <= 0 || size <= 0)
+		return (malloc(0));
+	if (size != mult / nmemb)
+		return (NULL);
+	res = (char *)malloc(size * nmemb);
+	if (!res)
+		return (NULL);
+	res = ft_memset(res, 0, nmemb * size);
+	return (res);
+}
 
 int	is_digit(char c)
 {
@@ -44,12 +61,11 @@ int	correct_number2(t_parsing *parsing, char current_char, char *player_chars)
 }
 
 void	correct_number3(t_parsing *parsing
-	, char current_char, int i, char *player_chars)
+	, char current_char, int start, char *player_chars)
 {
 	char	*line;
-	int		start;
+	int		i;
 
-	start = parsing->start_map;
 	line = parsing->map[start];
 	i = 0;
 	while (line[i] == ' ')

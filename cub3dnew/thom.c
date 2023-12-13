@@ -6,7 +6,7 @@
 /*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 10:13:55 by thrio             #+#    #+#             */
-/*   Updated: 2023/12/12 15:01:03 by thrio            ###   ########.fr       */
+/*   Updated: 2023/12/13 16:42:47 by thrio            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,17 +60,17 @@ void	init_window(t_data *s)
 {
 	s->mlx = mlx_init();
 	if (!s->mlx)
-		exit (1);
+		free_init_window(s);
 	ft_init_textures(s);
 	s->win = mlx_new_window(s->mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3D");
 	if (!s->win)
-		exit (1);
+		free_init_window(s);
 }
 
 void	ft_raycasting(t_data *s)
 {
 	if (init_var(s) == 1)
-		exit (1);
+		free_parsing(&s->parsing);
 	init_window(s);
 	ft_find_player(s);
 	draw_game(s);

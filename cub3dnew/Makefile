@@ -7,7 +7,10 @@ SRC 		= main.c parsing1.c put_text_struct.c \
 			get_next_line_utils.c utils.c raycasting.c \
 			utils2.c moves.c draw.c parsing_color.c \
 			free_parsing.c utils_parsing.c \
-			parsing_map_elements2.c parsing_directions.c
+			parsing_map_elements2.c parsing_directions.c \
+			parsing_textures.c put_text_struct2.c \
+			utils_parsing_2.c put_text_utils.c \
+			parsing_color2.c printerror_rgbhex.c
 
 
 CC 			= cc 
@@ -20,7 +23,7 @@ RM			= rm -rf
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(OBJ_DIR)
-	cc -g -Wall -Werror -Wextra -I/usr/include -Imlx_linux -O3 -c $< -o $@
+	${CC} -g -Wall -Werror -Wextra -I/usr/include -Imlx_linux -O3 -c $< -o $@
 
 all	: $(NAME)
 

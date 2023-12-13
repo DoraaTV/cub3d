@@ -6,7 +6,7 @@
 /*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 13:57:13 by thrio             #+#    #+#             */
-/*   Updated: 2023/12/13 13:40:42 by thrio            ###   ########.fr       */
+/*   Updated: 2023/12/13 16:58:28 by thrio            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,61 +74,6 @@ int	ft_get_size(char *file_cub3d_name, t_parsing *s)
 	return (0);
 }
 
-// void count_line_space(char	*line, t_parsing *s, int	count, int	check)
-// {
-// int i;
-// if (line[0] == ' ')
-// 			{
-// 				i = 0;
-// 				while (line[i])
-// 				{
-// 					if (line[i] == '1')
-// 					{
-// 						s->counter = count;
-// 						check = 1;
-// 					}
-// 					i++;
-// 				}
-// 		}
-// }
-
-// int	ft_get_size(char *file_cub3d_name, t_parsing *s)
-// {
-// 	int		fd;
-// 	char	*line;
-// 	int		check;
-// 	int		count;
-// 	//int		i;
-
-// 	check = 0;
-// 	count = 0;
-// 	fd = open(file_cub3d_name, O_RDONLY);
-// 	if (fd < 2)
-// 		return (1);
-// 	line = get_next_line(fd);
-// 	while (line && check == 0)
-// 	{
-// 		if (line[0] == '1' || line[0] == ' ')
-// 		{
-// 			count_line_space(line, s, count, check);
-// 		}
-// 		s->counter = count;
-// 		check = 1;
-// 		s->config_size++;
-// 		count++;
-// 		free(line);
-// 		line = get_next_line(fd);
-// 	}
-// 	free(line);
-// 	line = get_next_line(fd);
-// 	while (line)
-// 	{
-// 		free(line);
-// 		line = get_next_line(fd);
-// 	}
-// 	return (0);
-// }
-
 void	init_struct(t_parsing	*parsing)
 {
 	parsing->floor_value_1 = -1;
@@ -137,10 +82,11 @@ void	init_struct(t_parsing	*parsing)
 	parsing->sky_value_1 = -1;
 	parsing->sky_value_2 = -1;
 	parsing->sky_value_3 = -1;
-	parsing->no_texture_value = NULL;
-	parsing->we_texture_value = NULL;
-	parsing->so_texture_value = NULL;
-	parsing->ea_texture_value = NULL;
+	parsing->b = 0;
+	parsing->no_txt = NULL;
+	parsing->we_txt = NULL;
+	parsing->so_txt = NULL;
+	parsing->ea_txt = NULL;
 	parsing->s_texture_value = NULL;
 	parsing->map = NULL;
 	parsing->config_count = 0;

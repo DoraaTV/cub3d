@@ -6,7 +6,7 @@
 /*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 13:57:16 by thrio             #+#    #+#             */
-/*   Updated: 2023/12/13 11:53:17 by thrio            ###   ########.fr       */
+/*   Updated: 2023/12/13 14:13:14 by thrio            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	parsing_map_elements(char **text_file, t_parsing *parsing)
 {
 	(void)text_file;
-	if (correct_number(parsing, 0) == 1)
+	if (correct_number(parsing) == 1)
 		return (1);
 	if (map_closed(parsing) == 1)
 		return (1);

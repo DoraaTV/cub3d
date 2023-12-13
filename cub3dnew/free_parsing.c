@@ -6,7 +6,7 @@
 /*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 10:25:00 by thrio             #+#    #+#             */
-/*   Updated: 2023/12/13 10:28:30 by thrio            ###   ########.fr       */
+/*   Updated: 2023/12/13 14:31:31 by thrio            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,25 @@
 
 void	free_texture(t_parsing *parsing)
 {
-	if (!parsing->so_texture_value)
-		free(parsing->no_texture_value);
-	else if (!parsing->we_texture_value)
+	if (!parsing->so_txt)
+		free(parsing->no_txt);
+	else if (!parsing->we_txt)
 	{
-		free(parsing->no_texture_value);
-		free(parsing->so_texture_value);
+		free(parsing->no_txt);
+		free(parsing->so_txt);
 	}
-	else if (!parsing->ea_texture_value)
+	else if (!parsing->ea_txt)
 	{
-		free(parsing->no_texture_value);
-		free(parsing->so_texture_value);
-		free(parsing->we_texture_value);
+		free(parsing->no_txt);
+		free(parsing->so_txt);
+		free(parsing->we_txt);
 	}
 	else
 	{
-		free(parsing->no_texture_value);
-		free(parsing->so_texture_value);
-		free(parsing->we_texture_value);
-		free(parsing->ea_texture_value);
+		free(parsing->no_txt);
+		free(parsing->so_txt);
+		free(parsing->we_txt);
+		free(parsing->ea_txt);
 	}
 }
 

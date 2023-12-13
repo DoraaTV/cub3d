@@ -6,14 +6,13 @@
 /*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 10:14:15 by thrio             #+#    #+#             */
-/*   Updated: 2023/12/12 15:01:03 by thrio            ###   ########.fr       */
+/*   Updated: 2023/12/13 16:41:39 by thrio            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 void	ft_free2(t_data *s);
-void	ft_free_txt(t_data *s, int i);
 
 int	ft_close(t_data *s)
 {
@@ -24,16 +23,16 @@ int	ft_close(t_data *s)
 int	ft_init_textures(t_data *s)
 {
 	s->texture[0].img = mlx_xpm_file_to_image(s->mlx,
-			s->parsing.no_texture_value, &s->texture[0].width,
+			s->parsing.no_txt, &s->texture[0].width,
 			&s->texture[0].height);
 	s->texture[1].img = mlx_xpm_file_to_image(s->mlx,
-			s->parsing.so_texture_value, &s->texture[1].width,
+			s->parsing.so_txt, &s->texture[1].width,
 			&s->texture[1].height);
 	s->texture[2].img = mlx_xpm_file_to_image(s->mlx,
-			s->parsing.we_texture_value, &s->texture[2].width,
+			s->parsing.we_txt, &s->texture[2].width,
 			&s->texture[2].height);
 	s->texture[3].img = mlx_xpm_file_to_image(s->mlx,
-			s->parsing.ea_texture_value, &s->texture[3].width,
+			s->parsing.ea_txt, &s->texture[3].width,
 			&s->texture[3].height);
 	if (!s->texture[0].img || !s->texture[1].img
 		|| !s->texture[2].img || !s->texture[3].img)
@@ -93,10 +92,10 @@ void	ft_free_txt(t_data *s, int i)
 		}
 		i++;
 	}
-	free(s->parsing.so_texture_value);
-	free(s->parsing.we_texture_value);
-	free(s->parsing.no_texture_value);
-	free(s->parsing.ea_texture_value);
+	free(s->parsing.so_txt);
+	free(s->parsing.we_txt);
+	free(s->parsing.no_txt);
+	free(s->parsing.ea_txt);
 	free(s->parsing.s_texture_value);
 	free(s->texture);
 }

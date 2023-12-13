@@ -6,25 +6,21 @@
 /*   By: thrio <thrio@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 11:53:02 by thrio             #+#    #+#             */
-/*   Updated: 2023/12/13 12:25:54 by thrio            ###   ########.fr       */
+/*   Updated: 2023/12/13 14:15:22 by thrio            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	correct_number(t_parsing *parsing, size_t i)
+int	correct_number(t_parsing *parsing)
 {
-	char	*player_chars;
 	int		start;
 	char	current_char;
 
-	player_chars = "NSEW";
 	current_char = 0;
 	start = parsing->start_map - 1;
 	while (++start < parsing->num_lines)
-	{
-		correct_number3(parsing, current_char, i, player_chars);
-	}
+		correct_number3(parsing, current_char, start, "NSEW");
 	return (0);
 }
 
